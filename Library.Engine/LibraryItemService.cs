@@ -26,6 +26,21 @@ namespace Library.Engine
             return items;
         }
 
+        public async Task<LibraryItem> GetLibraryItem(int id)
+        {
+            return await _libraryItemRepository.GetLibraryItem(id);
+        }
+
+        public async Task<bool> CreateLibraryItem(LibraryItem libraryItem)
+        {
+            if (libraryItem.Type != "ReferenceBook")
+            {
+                libraryItem.IsBorrowable = true;
+            }
+
+            return await _libraryItemRepository.CreateLibraryItem(libraryItem);
+        }
+
         private List<LibraryItem> AddAcronymToTitle(List<LibraryItem> items)
         {
             var libraryItemsWithAcronymTitle = new List<LibraryItem>();

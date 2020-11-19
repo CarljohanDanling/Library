@@ -9,5 +9,7 @@ namespace Library.Engine
     public interface ILibraryItemService
     {
         Task<IEnumerable<LibraryItem>> GetLibraryItems();
+        Task<LibraryItem> GetLibraryItem(int id);
+        Task<bool> CreateLibraryItem(LibraryItem libraryItem);
     }
 }

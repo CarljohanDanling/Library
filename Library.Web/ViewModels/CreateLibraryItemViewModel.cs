@@ -7,8 +7,8 @@ namespace Library.Web.ViewModels
     {
         public AudioBookCreate AudioBook { get; set; }
         public BookCreate Book { get; set; }
-        public DVD DVD { get; set; }
-        public ReferenceBook ReferenceBook { get; set; }
+        public DvdCreate Dvd { get; set; }
+        public ReferenceBookCreate ReferenceBook { get; set; }
         public List<CategoryModel> Categories { get; set; }
         public string SelectedType { get; set; }
     }

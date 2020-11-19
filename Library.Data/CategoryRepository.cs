@@ -36,10 +36,8 @@ namespace Library.Data
             return category;
         }
 
-        public async Task<bool> CreateCategory(CategoryModelDL categoryModel)
+        public async Task<bool> CreateCategory(Category category)
         {
-            var category = _mapper.Map<Category>(categoryModel);
-
             try
             {
                 await _libraryContext.Categories.AddAsync(category);
@@ -60,10 +58,8 @@ namespace Library.Data
             return false;
         }
 
-        public async Task<bool> EditCategory(CategoryModelDL categoryModel)
+        public async Task<bool> EditCategory(Category category)
         {
-            var category = _mapper.Map<Category>(categoryModel);
-
             try
             {
                 var successfullyUpdate = _libraryContext.Update(category);
@@ -83,10 +79,8 @@ namespace Library.Data
             return false;
         }
 
-        public async Task DeleteCategory(CategoryModelDL categoryModel)
+        public async Task DeleteCategory(Category category)
         {
-            var category = _mapper.Map<Category>(categoryModel);
-
             _libraryContext.Categories.Remove(category);
             await _libraryContext.SaveChangesAsync();
         }

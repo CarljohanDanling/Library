@@ -1,14 +1,10 @@
-﻿using Library.Data.Database.Context;
-using Library.Web.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Library.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Library.Engine;
-using Library.Engine.Dto;
+using Library.Data.Database.Models;
 
 namespace Library.Web.Controllers
 {
@@ -39,12 +35,12 @@ namespace Library.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CategoryModel category)
         {
-            var createCategoryDto = _mapper.Map<CategoryDto>(category);
+            var createCategory = _mapper.Map<Category>(category);
             bool isDuplicateNameError;
 
             if (ModelState.IsValid)
             {
-                isDuplicateNameError = await _categoryService.CreateCategory(createCategoryDto);
+                isDuplicateNameError = await _categoryService.CreateCategory(createCategory);
                 if (isDuplicateNameError)
                 {
                     ModelState.AddModelError("DuplicateNameError", "A category with that name already exist.");
@@ -69,7 +65,7 @@ namespace Library.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(CategoryModel category)
         {
-            var editCategoryDto = _mapper.Map<CategoryDto>(category);
+            var editCategoryDto = _mapper.Map<Category>(category);
             bool isDuplicateNameError;
 
             if (ModelState.IsValid)
@@ -99,7 +95,7 @@ namespace Library.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(CategoryModel category)
         {
-            var categoryMapped = _mapper.Map<CategoryDto>(category);
+            var categoryMapped = _mapper.Map<Category>(category);
 
             var successfullyDeleted = await _categoryService.DeleteCategory(categoryMapped);
 

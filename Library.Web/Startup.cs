@@ -36,6 +36,13 @@ namespace Library.Web
 
             services.AddControllersWithViews();
 
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             services.AddDbContext<LibraryContext>(config => 
                 config.UseSqlServer(_configuration.GetConnectionString("LibraryDatabase")));
         }
@@ -56,6 +63,7 @@ namespace Library.Web
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

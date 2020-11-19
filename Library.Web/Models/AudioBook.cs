@@ -8,8 +8,8 @@ namespace Library.Web.Models
 {
     public class AudioBook
     {
-        //[Required]
-        //public int Id { get; set; }
+        [Required]
+        public int Id { get; set; }
 
         [Required]
         public string Title { get; set; }

@@ -9,5 +9,7 @@ namespace Library.Data
     public interface ILibraryItemRepository
     {
         Task<List<LibraryItem>> GetLibraryItems();
+        Task<LibraryItem> GetLibraryItem(int id);
+        Task<bool> CreateLibraryItem(LibraryItem libraryItem);
     }
 }

@@ -13,10 +13,10 @@ namespace Library.Data
 
         Task<Category> GetCategory(int id);
         
-        Task<bool> CreateCategory(CategoryModelDL category);
+        Task<bool> CreateCategory(Category category);
 
-        Task<bool> EditCategory(CategoryModelDL category);
+        Task<bool> EditCategory(Category category);
 
-        Task DeleteCategory(CategoryModelDL category);
+        Task DeleteCategory(Category category);
     }
 }

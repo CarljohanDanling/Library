@@ -1,6 +1,6 @@
 ﻿@model Library.Web.ViewModels.CreateLibraryItemViewModel
 
-<div class="book box">
+<div class="referenceBook box">
     @using (Html.BeginForm("Create", "LibraryItem"))
     {
         <div>
@@ -30,7 +30,7 @@
                 @Html.HiddenFor(model => Model.Categories[i].Id)
             }*@
 
-            <input type="hidden" name="selectedType" value="book" />
+            <input type="hidden" name="selectedType" value="referenceBook" />
             <input type="submit" value="Create" />
         </div>
     }

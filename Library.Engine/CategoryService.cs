@@ -2,7 +2,6 @@
 using Library.Data;
 using Library.Data.Database.Models;
 using Library.Data.Models;
-using Library.Engine.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -34,32 +33,27 @@ namespace Library.Engine
             return await _categoryRepository.GetCategory(id);
         }
 
-        public async Task<bool> CreateCategory(CategoryDto category)
+        public async Task<bool> CreateCategory(Category category)
         {
-            var createCategoryModel = _mapper.Map<CategoryModelDL>(category);
-
-            return await _categoryRepository.CreateCategory(createCategoryModel);
+            return await _categoryRepository.CreateCategory(category);
         }
 
-        public async Task<bool> EditCategory(CategoryDto category)
+        public async Task<bool> EditCategory(Category category)
         {
-            var editCategoryModel = _mapper.Map<CategoryModelDL>(category);
-
-            return await _categoryRepository.EditCategory(editCategoryModel);
+            return await _categoryRepository.EditCategory(category);
         }
 
-        public async Task<bool> DeleteCategory(CategoryDto categoryDto)
+        public async Task<bool> DeleteCategory(Category category)
         {
             var libraryItems = await _libraryItemRepository.GetLibraryItems();
 
-            var anyReferencedCategory = libraryItems.Any(li => li.CategoryId == categoryDto.Id);
+            var anyReferencedCategory = libraryItems.Any(li => li.CategoryId == category.Id);
 
             if (anyReferencedCategory)
             {
                 return false;
             }
 
-            var category = _mapper.Map<CategoryModelDL>(categoryDto);
             await _categoryRepository.DeleteCategory(category);
 
             return true;

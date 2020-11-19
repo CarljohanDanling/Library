@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library.Web.Models
 {
-    public class DVD
+    public class Dvd
     {
         //[Required]
         //public int Id { get; set; }

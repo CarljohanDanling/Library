@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Library.Data.Database.Models;
 using Library.Engine;
 using Library.Web.Models;
 using Library.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,19 +36,19 @@ namespace Library.Web.Controllers
                 LibraryItemModel = new LibraryItemModel()
             };
 
-            if (sortOption == "type")
-            {
-                viewModel.LibraryItems = viewModel.LibraryItems
-                    .OrderBy(l => l.Type).ToList();
-            }
+            var sortedItems = Sorter(viewModel, sortOption);
 
-            else
-            {
-                viewModel.LibraryItems = viewModel.LibraryItems
-                    .OrderBy(l => l.Category.CategoryName).ToList();
-            }
+            return View(sortedItems);
+        }
 
-            return View(viewModel);
+        public async Task<IActionResult> Edit(int id)
+        {
+            var test = await _libraryItemService.GetLibraryItem(id);
+
+
+
+
+            return View();
         }
 
         public async Task<IActionResult> Create()
@@ -65,20 +67,63 @@ namespace Library.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateLibraryItemViewModel viewModel, string selectedType)
         {
-
             if (ModelState.IsValid)
             {
-                //_libraryItemService.SparaNedItem
+                switch (selectedType)
+                {
+                    case "audioBook":
+                        var audioBook = _mapper.Map<LibraryItem>(viewModel.AudioBook);
+                        await _libraryItemService.CreateLibraryItem(audioBook);
+                        break;
+                    case "book":
+                        var book = _mapper.Map<LibraryItem>(viewModel.Book);
+                        await _libraryItemService.CreateLibraryItem(book);
+                        break;
+                    case "dvd":
+                        var dvd = _mapper.Map<LibraryItem>(viewModel.Dvd);
+                        await _libraryItemService.CreateLibraryItem(dvd);
+                        break;
+                    case "referenceBook":
+                        var referenceBook = _mapper.Map<LibraryItem>(viewModel.ReferenceBook);
+                        await _libraryItemService.CreateLibraryItem(referenceBook);
+                        break;
+                }
 
                 return RedirectToAction("Index");
             }
-            
-            var categories = await _categoryService.GetCategories();
-            var categoriesMapped = _mapper.Map<List<CategoryModel>>(categories);
-            viewModel.Categories = categoriesMapped;
-            viewModel.SelectedType = selectedType;
 
+            viewModel.SelectedType = selectedType;
             return View(viewModel);
+        }
+
+        private LibraryItemViewModel Sorter(LibraryItemViewModel viewModel, string sortOption)
+        {
+            var sessionSorting = HttpContext.Session.GetString("Sorting");
+
+            if (sortOption == null && sessionSorting == null)
+            {
+                viewModel.LibraryItems = viewModel.LibraryItems
+                    .OrderBy(l => l.Category.CategoryName).ToList();
+            }
+
+            else
+            {
+                if (sortOption == "category" || sessionSorting == "category" && sortOption == null)
+                {
+                    HttpContext.Session.SetString("Sorting", "category");
+                    viewModel.LibraryItems = viewModel.LibraryItems
+                        .OrderBy(l => l.Category.CategoryName).ToList();
+                }
+
+                else
+                {
+                    HttpContext.Session.SetString("Sorting", "type");
+                    viewModel.LibraryItems = viewModel.LibraryItems
+                        .OrderBy(l => l.Type).ToList();
+                }
+            }
+
+            return viewModel;
         }
     }
 }

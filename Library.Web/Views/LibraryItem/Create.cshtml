@@ -1,0 +1,43 @@
+﻿@model Library.Web.ViewModels.CreateLibraryItemViewModel
+
+<div>
+    <select>
+        <option>Choose what type of item to create</option>
+        <option value="book" selected="@(Model.SelectedType == "book")">Book</option>
+        <option value="dvd" selected="@(Model.SelectedType == "dvd")">DVD</option>
+        <option value="audioBook" selected="@(Model.SelectedType == "audioBook")">Audio Book</option>
+        <option value="referenceBook" selected="@(Model.SelectedType == "referenceBook")">Reference Book</option>
+    </select>
+</div>
+
+@await Html.PartialAsync("_AudioBookCreate", Model)
+@await Html.PartialAsync("_BookCreate", Model)
+
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("select").change(function () {
+                $("select option:selected").each(function () {
+                    if ($(this).attr("value") == "book") {
+                        $(".box").hide();
+                        $(".book").show();
+                    }
+                    if ($(this).attr("value") == "dvd") {
+                        $(".box").hide();
+                        $(".dvd").show();
+                    }
+                    if ($(this).attr("value") == "audioBook") {
+                        $(".box").hide();
+                        $(".audioBook").show();
+                    }
+                    if ($(this).attr("value") == "referenceBook") {
+                        $(".box").hide();
+                        $(".referenceBook").show();
+                    }
+                });
+            }).change();
+        });
+    </script>
+}

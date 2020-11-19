@@ -1,0 +1,14 @@
+﻿@model CategoryModel
+
+<div class="form-group">
+
+    <form method="post" asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <label asp-for="CategoryName"></label>
+        <input asp-for="CategoryName" />
+        <span asp-validation-for="CategoryName" class="text-danger"></span>
+        <span class="text-danger">@Html.ValidationMessage("DuplicateNameError")</span>
+        <br />
+        <input type="submit" value="Create" />
+    </form>
+</div>

@@ -1,0 +1,27 @@
+﻿@model List<CategoryModel>
+<div>
+    @Html.ActionLink("Create category", "Create")
+</div>
+
+<br />
+
+<h4>Categories:</h4>
+
+<div>
+    <table>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td style="width: 70%">
+                    @category.CategoryName
+                </td>
+                <td>
+                    <a asp-action="Edit" class="btn btn-primary" asp-route-id=@category.Id>Edit</a>
+                </td>
+                <td>
+                    <a asp-action="Delete" class="btn btn-danger" asp-route-id=@category.Id>Delete</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

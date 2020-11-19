@@ -1,0 +1,25 @@
+﻿@model Library.Web.ViewModels.CreateLibraryItemViewModel
+
+<div class="audioBook box">
+    @using (Html.BeginForm("Create", "LibraryItem"))
+    {
+        <div>
+            @Html.ValidationSummary(true, "ValidationSummary")
+            <ol>
+                <li>
+                    @Html.LabelFor(m => m.AudioBook.Title)
+                    @Html.TextBoxFor(m => m.AudioBook.Title)
+                    @Html.ValidationMessageFor(m => m.AudioBook.Title)
+                </li>
+                <li>
+                    @Html.LabelFor(m => m.AudioBook.RunTimeMinutes)
+                    @Html.TextBoxFor(m => m.AudioBook.RunTimeMinutes)
+                    @Html.ValidationMessageFor(m => m.AudioBook.RunTimeMinutes)
+                </li>
+            </ol>
+            @Html.DropDownListFor(m => m.AudioBook.CategoryId, new SelectList(Model.Categories, "Id", "CategoryName"))
+            <input type="hidden" name="option" value="audioBook" />
+            <input type="submit" value="Create" />
+        </div>
+    }
+</div>

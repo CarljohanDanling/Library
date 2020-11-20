@@ -1,5 +1,4 @@
 ﻿@model Library.Web.ViewModels.LibraryItemViewModel
-@using Microsoft.AspNetCore.Http;
 
 <div>
     @Html.ActionLink("Create item", "Create")
@@ -23,7 +22,7 @@
                 @Html.DisplayNameFor(m => m.LibraryItemModel.Borrower)
             </td>
             <td>
-                @Html.DisplayNameFor(m => m.LibraryItemModel.BorrowerDate)
+                @Html.DisplayNameFor(m => m.LibraryItemModel.BorrowDate)
             </td>
         </tr>
 
@@ -45,7 +44,7 @@
                 <td>
                     @if (item.IsBorrowable == false && item.Type != "ReferenceBook")
                     {
-                        @item.BorrowerDate.ToShortDateString()
+                        @item.BorrowDate.ToShortDateString()
                     }
                 </td>
 

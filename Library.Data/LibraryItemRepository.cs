@@ -29,6 +29,7 @@ namespace Library.Data
         public async Task<LibraryItem> GetLibraryItem(int id)
         {
             var item = await _libraryContext.LibraryItems
+                .Include(l => l.Category)
                 .Where(li => li.Id == id)
                 .FirstOrDefaultAsync();
 
@@ -49,6 +50,23 @@ namespace Library.Data
             {
                 return false;
             }
+        }
+
+        public async Task EditLibraryItem()
+        {
+
+        }
+
+        public async Task CheckOutLibraryItem(LibraryItem libraryItem)
+        {
+            _libraryContext.LibraryItems.Update(libraryItem);
+            await _libraryContext.SaveChangesAsync();
+        }
+
+        public async Task CheckInLibraryItem(LibraryItem libraryItem)
+        {
+            _libraryContext.LibraryItems.Update(libraryItem);
+            await _libraryContext.SaveChangesAsync();
         }
     }
 }

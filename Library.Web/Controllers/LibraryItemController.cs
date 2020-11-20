@@ -43,12 +43,51 @@ namespace Library.Web.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var test = await _libraryItemService.GetLibraryItem(id);
+            var libraryItem = await _libraryItemService.GetLibraryItem(id);
+            var categories = await _categoryService.GetCategories();
 
+            var categoriesMapped = _mapper.Map<List<CategoryModel>>(categories);
+            var viewModel = new EditLibraryItemViewModel
+            {
+                Categories = categoriesMapped
+            };
 
+            switch (libraryItem.Type)
+            {
+                case "AudioBook":
+                    var audioBook = _mapper.Map<AudioBookEdit>(libraryItem);
+                    audioBook.Categories = categoriesMapped;
+                    viewModel.AudioBook = audioBook;
+                    return View(viewModel);
+                case "Book":
+                    var book = _mapper.Map<BookEdit>(libraryItem);
+                    book.Categories = categoriesMapped;
+                    viewModel.Book = book;
+                    return View(viewModel);
+            }
 
+            return RedirectToAction("Index");
+        }
 
-            return View();
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditLibraryItemViewModel viewModel, string submit, string type)
+        {
+            if (ModelState.IsValid)
+            {
+                switch (type)
+                {
+                    case "AudioBook":
+                        var audioBook = _mapper.Map<LibraryItem>(viewModel.AudioBook);
+                        await _libraryItemService.EditLibraryItem(audioBook, submit);
+                        break;
+                    case "Book":
+                        var book = _mapper.Map<LibraryItem>(viewModel.Book);
+                        await _libraryItemService.EditLibraryItem(book, submit);
+                        break;
+                }
+            }
+
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Create()

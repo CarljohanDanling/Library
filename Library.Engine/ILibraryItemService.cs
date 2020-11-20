@@ -11,5 +11,6 @@ namespace Library.Engine
         Task<IEnumerable<LibraryItem>> GetLibraryItems();
         Task<LibraryItem> GetLibraryItem(int id);
         Task<bool> CreateLibraryItem(LibraryItem libraryItem);
+        Task EditLibraryItem(LibraryItem libraryItem, string submit);
     }
 }

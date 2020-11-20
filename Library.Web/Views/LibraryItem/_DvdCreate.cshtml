@@ -19,11 +19,11 @@
         </ol>
         @Html.DropDownListFor(m => m.Dvd.CategoryId, new SelectList(Model.Categories, "Id", "CategoryName"))
 
-        @*@for (int i = 0; i < Model.Categories.Count; i++)
+        @for (int i = 0; i < Model.Categories.Count; i++)
         {
             @Html.HiddenFor(model => Model.Categories[i].CategoryName)
             @Html.HiddenFor(model => Model.Categories[i].Id)
-        }*@
+        }
 
         <input type="hidden" name="selectedType" value="dvd" />
         <input type="submit" value="Create" />

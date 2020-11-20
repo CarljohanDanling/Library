@@ -33,7 +33,7 @@ namespace Library.Data.Migrations
                     RunTimeMinutes = table.Column<int>(nullable: true),
                     IsBorrowable = table.Column<bool>(nullable: false),
                     Borrower = table.Column<string>(nullable: true),
-                    BorrowerDate = table.Column<DateTime>(nullable: true),
+                    BorrowDate = table.Column<DateTime>(nullable: true),
                     Type = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -58,9 +58,24 @@ namespace Library.Data.Migrations
                 values: new object[] { 2, "Comedy" });
 
             migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "CategoryName" },
+                values: new object[] { 3, "Horror" });
+
+            migrationBuilder.InsertData(
                 table: "LibraryItems",
-                columns: new[] { "Id", "Author", "Borrower", "BorrowerDate", "CategoryId", "IsBorrowable", "Pages", "RunTimeMinutes", "Title", "Type" },
+                columns: new[] { "Id", "Author", "BorrowDate", "Borrower", "CategoryId", "IsBorrowable", "Pages", "RunTimeMinutes", "Title", "Type" },
                 values: new object[] { 1, "James Verne", null, null, 1, true, 200, null, "Jorden runt på 80 dagar", "Book" });
+
+            migrationBuilder.InsertData(
+                table: "LibraryItems",
+                columns: new[] { "Id", "Author", "BorrowDate", "Borrower", "CategoryId", "IsBorrowable", "Pages", "RunTimeMinutes", "Title", "Type" },
+                values: new object[] { 2, "Kristina Apppelqvist", null, null, 2, true, 200, null, "De blå damerna", "Book" });
+
+            migrationBuilder.InsertData(
+                table: "LibraryItems",
+                columns: new[] { "Id", "Author", "BorrowDate", "Borrower", "CategoryId", "IsBorrowable", "Pages", "RunTimeMinutes", "Title", "Type" },
+                values: new object[] { 3, null, new DateTime(2020, 11, 5, 14, 0, 0, 0, DateTimeKind.Unspecified), "Pär", 2, true, null, 100, "Metallica", "AudioBook" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_CategoryName",

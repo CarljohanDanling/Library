@@ -1,0 +1,90 @@
+﻿@model Library.Web.ViewModels.EditLibraryItemViewModel
+
+@using (Html.BeginForm("Edit", "LibraryItem"))
+{
+    <div>
+        <table width="100%">
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(m => m.AudioBook.Title)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => m.AudioBook.Type)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => m.Categories.FirstOrDefault().CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => m.AudioBook.RunTimeMinutes)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => m.AudioBook.Borrower)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => m.AudioBook.BorrowDate)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.EditorFor(m => m.AudioBook.Title)
+                </td>
+                <td>
+                    @Model.AudioBook.Type
+                </td>
+                <td>
+                    @Html.DropDownListFor(m => m.AudioBook.CategoryId, new SelectList(Model.Categories, "Id", "CategoryName"))
+                </td>
+                <td>
+                    @Html.EditorFor(m => m.AudioBook.RunTimeMinutes)
+                </td>
+
+                @if (Model.AudioBook.Borrower != null && Model.AudioBook.BorrowDate != null)
+                {
+                    <td>
+                        @Html.EditorFor(m => m.AudioBook.Borrower)
+                    </td>
+                    <td>
+                        @Model.AudioBook.BorrowDate.ToShortDateString()
+                    </td>
+                }
+
+                else
+                {
+                    <td></td>
+                    <td></td>
+                }
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                @if (Model.AudioBook.IsBorrowable)
+                {
+                    <td>
+                        Enter borrower name:
+                        @Html.TextBoxFor(m => m.AudioBook.Borrower)
+                    </td>
+                    <td>
+                        <input type="submit" name="submit" value="CheckOut" />
+                    </td>
+                }
+
+                else
+                {
+                    <td>
+                        <input type="submit" name="submit" value="CheckIn" />
+                    </td>
+                }
+            </tr>
+        </table>
+
+        @Html.HiddenFor(m => m.AudioBook.Id)
+        @Html.HiddenFor(m => m.AudioBook.IsBorrowable)
+        @Html.HiddenFor(m => m.AudioBook.BorrowDate)
+        @Html.HiddenFor(m => m.AudioBook.Borrower)
+        @Html.HiddenFor(m => m.AudioBook.Type)
+        <input type="hidden" name="type" value="@Model.AudioBook.Type" />
+        <input type="submit" name="submit" value="Edit" />
+    </div>
+}

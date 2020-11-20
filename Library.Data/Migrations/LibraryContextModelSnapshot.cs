@@ -47,6 +47,11 @@ namespace Library.Data.Migrations
                         {
                             Id = 2,
                             CategoryName = "Comedy"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryName = "Horror"
                         });
                 });
 
@@ -60,11 +65,11 @@ namespace Library.Data.Migrations
                     b.Property<string>("Author")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("BorrowDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Borrower")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("BorrowerDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -100,6 +105,27 @@ namespace Library.Data.Migrations
                             Pages = 200,
                             Title = "Jorden runt på 80 dagar",
                             Type = "Book"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Author = "Kristina Apppelqvist",
+                            CategoryId = 2,
+                            IsBorrowable = true,
+                            Pages = 200,
+                            Title = "De blå damerna",
+                            Type = "Book"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BorrowDate = new DateTime(2020, 11, 5, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            Borrower = "Pär",
+                            CategoryId = 2,
+                            IsBorrowable = true,
+                            RunTimeMinutes = 100,
+                            Title = "Metallica",
+                            Type = "AudioBook"
                         });
                 });
 

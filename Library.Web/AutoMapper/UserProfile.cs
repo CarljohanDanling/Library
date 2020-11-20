@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Library.Data.Database.Models;
 using Library.Web.Models;
+using Library.Web.ViewModels;
 
 namespace Library.Web.AutoMapper
 {
@@ -17,6 +18,12 @@ namespace Library.Web.AutoMapper
             CreateMap<BookCreate, LibraryItem>();
             CreateMap<DvdCreate, LibraryItem>();
             CreateMap<ReferenceBookCreate, LibraryItem>();
+
+            CreateMap<LibraryItem, AudioBookEdit>();
+            CreateMap<LibraryItem, BookEdit>();
+
+            CreateMap<AudioBookEdit, LibraryItem>();
+            CreateMap<BookEdit, LibraryItem>();
         }
     }
 }

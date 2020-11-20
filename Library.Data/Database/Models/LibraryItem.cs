@@ -15,7 +15,7 @@ namespace Library.Data.Database.Models
         public int? RunTimeMinutes { get; set; }
         public bool IsBorrowable { get; set; }
         public string Borrower { get; set; }
-        public DateTime? BorrowerDate { get; set; }
+        public DateTime? BorrowDate { get; set; }
         public string Type { get; set; }
     }
 }

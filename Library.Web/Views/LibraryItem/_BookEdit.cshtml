@@ -1,0 +1,97 @@
+﻿@model Library.Web.ViewModels.EditLibraryItemViewModel
+
+@using (Html.BeginForm("Edit", "LibraryItem"))
+{
+    <div>
+        <table width="100%">
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(m => m.Book.Title)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => m.Book.Type)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => m.Book.Author)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => m.Book.Pages)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => m.Categories.FirstOrDefault().CategoryName)
+                </td>
+                <td>
+                <td>
+                    @Html.DisplayNameFor(m => m.Book.Borrower)
+                </td>
+                <td>
+                    @Html.DisplayNameFor(m => m.Book.BorrowDate)
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    @Html.EditorFor(m => m.Book.Title)
+                </td>
+                <td>
+                    @Model.Book.Type
+                </td>
+                <td>
+                    @Html.EditorFor(m => m.Book.Author)
+                </td>
+                <td>
+                    @Html.EditorFor(m => m.Book.Pages)
+                </td>
+                <td>
+                    @Html.DropDownListFor(m => m.Book.CategoryId, new SelectList(Model.Categories, "Id", "CategoryName"))
+                </td>
+
+                @if (Model.Book.Borrower != null && Model.Book.BorrowDate != null)
+                {
+                    <td>
+                        @Html.EditorFor(m => m.Book.Borrower)
+                    </td>
+                    <td>
+                        @Model.Book.BorrowDate.ToShortDateString()
+                    </td>
+                }
+
+                else
+                {
+                    <td></td>
+                    <td></td>
+                }
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                @if (Model.Book.IsBorrowable)
+                {
+                    <td>
+                        Enter borrower name:
+                        @Html.TextBoxFor(m => m.Book.Borrower)
+                    </td>
+                    <td>
+                        <input type="submit" name="submit" value="CheckOut" />
+                    </td>
+                }
+
+                else
+                {
+                    <td>
+                        <input type="submit" name="submit" value="CheckIn" />
+                    </td>
+                }
+            </tr>
+        </table>
+
+        @Html.HiddenFor(m => m.Book.Id)
+        @Html.HiddenFor(m => m.Book.IsBorrowable)
+        @Html.HiddenFor(m => m.Book.BorrowDate)
+        @Html.HiddenFor(m => m.Book.Borrower)
+        @Html.HiddenFor(m => m.Book.Type)
+        <input type="hidden" name="type" value="@Model.Book.Type" />
+        <input type="submit" name="submit" value="Edit" />
+    </div>
+}

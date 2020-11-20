@@ -41,6 +41,47 @@ namespace Library.Engine
             return await _libraryItemRepository.CreateLibraryItem(libraryItem);
         }
 
+        public async Task EditLibraryItem(LibraryItem libraryItem, string submit)
+        {
+            if (submit == "Edit")
+            {
+                
+            }
+
+            else if (submit == "CheckOut")
+            {
+                await CheckOutLibraryItem(libraryItem);
+            }
+
+            else
+            {
+                await CheckInLibraryItem(libraryItem);
+            }
+        }
+
+        private async Task CheckOutLibraryItem(LibraryItem libraryItem)
+        {
+            var item = await _libraryItemRepository.GetLibraryItem(libraryItem.Id);
+
+            item.IsBorrowable = false;
+            item.Borrower = libraryItem.Borrower;
+            item.BorrowDate = DateTime.Today;
+
+            await _libraryItemRepository.CheckOutLibraryItem(item);
+        }
+
+        private async Task CheckInLibraryItem(LibraryItem libraryItem)
+        {
+            var item = await _libraryItemRepository.GetLibraryItem(libraryItem.Id);
+
+            item.IsBorrowable = true;
+            item.Borrower = null;
+            item.BorrowDate = null;
+
+            await _libraryItemRepository.CheckInLibraryItem(item);
+        }
+
+
         private List<LibraryItem> AddAcronymToTitle(List<LibraryItem> items)
         {
             var libraryItemsWithAcronymTitle = new List<LibraryItem>();

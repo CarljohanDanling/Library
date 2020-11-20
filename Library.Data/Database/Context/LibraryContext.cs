@@ -38,8 +38,35 @@ namespace Library.Data.Database.Context
                     RunTimeMinutes = null,
                     IsBorrowable = true,
                     Borrower = null,
-                    BorrowerDate = null,
+                    BorrowDate = null,
                     Type = "Book"
+                });
+
+            modelBuilder.Entity<LibraryItem>().HasData(
+                new LibraryItem()
+                {
+                    Id = 2,
+                    CategoryId = 2,
+                    Title = "De blå damerna",
+                    Author = "Kristina Apppelqvist",
+                    Pages = 200,
+                    IsBorrowable = true,
+                    Borrower = null,
+                    BorrowDate = null,
+                    Type = "Book"
+                });
+
+            modelBuilder.Entity<LibraryItem>().HasData(
+                new LibraryItem()
+                {
+                    Id = 3,
+                    CategoryId = 2,
+                    Title = "Metallica",
+                    RunTimeMinutes = 100,
+                    IsBorrowable = false,
+                    Borrower = "Pär",
+                    BorrowDate = new DateTime(2020, 11, 05, 14, 00, 00),
+                    Type = "AudioBook"
                 });
 
             modelBuilder.Entity<Category>().HasData(
@@ -54,6 +81,13 @@ namespace Library.Data.Database.Context
                 {
                     Id = 2,
                     CategoryName = "Comedy"
+                });
+
+            modelBuilder.Entity<Category>().HasData(
+                new Category()
+                {
+                    Id = 3,
+                    CategoryName = "Horror"
                 });
         }
     }

@@ -1,1 +1,11 @@
-﻿
+﻿@model Library.Web.ViewModels.EditLibraryItemViewModel
+
+@if (Model.AudioBook != null)
+{
+    await Html.RenderPartialAsync("_AudioBookEdit", Model);
+}
+
+else if (Model.Book != null)
+{
+    await Html.RenderPartialAsync("_BookEdit", Model);
+}

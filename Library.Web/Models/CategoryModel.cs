@@ -11,7 +11,7 @@ namespace Library.Web.Models
         [Required]
         public int Id { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Cannot be empty")]
+        [Required]
         [Display(Name = "Category Name")]
         public string CategoryName { get; set; }
     }

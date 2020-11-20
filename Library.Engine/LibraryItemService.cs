@@ -43,19 +43,19 @@ namespace Library.Engine
 
         public async Task EditLibraryItem(LibraryItem libraryItem, string submit)
         {
-            if (submit == "Edit")
+            switch (submit)
             {
-                
-            }
-
-            else if (submit == "CheckOut")
-            {
-                await CheckOutLibraryItem(libraryItem);
-            }
-
-            else
-            {
-                await CheckInLibraryItem(libraryItem);
+                case "Edit":
+                    await _libraryItemRepository.EditLibraryItem(libraryItem);
+                    break;
+                case "CheckOut":
+                    await CheckOutLibraryItem(libraryItem);
+                    break;
+                case "CheckIn":
+                    await CheckInLibraryItem(libraryItem);
+                    break;
+                default: 
+                    throw new Exception("No submit action chosen");
             }
         }
 

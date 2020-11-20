@@ -6,34 +6,18 @@
         <table width="50%">
             <tr>
                 <td>
-                    @Html.DisplayNameFor(m => m.Book.Title)
+                    @Html.DisplayNameFor(m => m.Dvd.Title)
                 </td>
                 <td>
-                    @Html.EditorFor(m => m.Book.Title)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.DisplayNameFor(m => m.Book.Type)
-                </td>
-                <td>
-                    @Model.Book.Type
+                    @Html.EditorFor(m => m.Dvd.Title)
                 </td>
             </tr>
             <tr>
                 <td>
-                    @Html.DisplayNameFor(m => m.Book.Author)
+                    @Html.DisplayNameFor(m => m.Dvd.Type)
                 </td>
                 <td>
-                    @Html.EditorFor(m => m.Book.Author)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.DisplayNameFor(m => m.Book.Pages)
-                </td>
-                <td>
-                    @Html.EditorFor(m => m.Book.Pages)
+                    @Model.Dvd.Type
                 </td>
             </tr>
             <tr>
@@ -41,35 +25,43 @@
                     @Html.DisplayNameFor(m => m.Categories.FirstOrDefault().CategoryName)
                 </td>
                 <td>
-                    @Html.DropDownListFor(m => m.Book.CategoryId, new SelectList(Model.Categories, "Id", "CategoryName"))
+                    @Html.DropDownListFor(m => m.Dvd.CategoryId, new SelectList(Model.Categories, "Id", "CategoryName"))
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(m => m.Dvd.RunTimeMinutes)
+                </td>
+                <td>
+                    @Html.EditorFor(m => m.Dvd.RunTimeMinutes)
                 </td>
             </tr>
 
-            @if (Model.Book.Borrower != null)
+            @if (Model.Dvd.Borrower != null)
             {
                 <tr>
                     <td>
-                        @Html.DisplayNameFor(m => m.Book.Borrower)
+                        @Html.DisplayNameFor(m => m.Dvd.Borrower)
                     </td>
                     <td>
-                        @Html.TextBoxFor(m => m.Book.Borrower)
+                        @Html.TextBoxFor(m => m.Dvd.Borrower)
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        @Html.DisplayNameFor(m => m.Book.BorrowDate)
+                        @Html.DisplayNameFor(m => m.Dvd.BorrowDate)
                     </td>
                     <td>
-                        @Model.Book.BorrowDate.ToShortDateString()
+                        @Model.Dvd.BorrowDate.ToShortDateString()
                     </td>
                 </tr>
             }
 
-            @if (Model.Book.IsBorrowable)
+            @if (Model.Dvd.IsBorrowable)
             {
                 <tr>
                     <td>
-                        Enter name: @Html.TextBoxFor(m => m.Book.Borrower)
+                        Enter name: @Html.TextBoxFor(m => m.Dvd.Borrower)
                     </td>
                     <td>
                         <input type="submit" name="submit" value="CheckOut" />
@@ -87,16 +79,16 @@
             }
         </table>
 
-        @Html.HiddenFor(m => m.Book.Id)
-        @Html.HiddenFor(m => m.Book.IsBorrowable)
-        @Html.HiddenFor(m => m.Book.BorrowDate)
-        @Html.HiddenFor(m => m.Book.Borrower)
-        @Html.HiddenFor(m => m.Book.Type)
+        @Html.HiddenFor(m => m.Dvd.Id)
+        @Html.HiddenFor(m => m.Dvd.IsBorrowable)
+        @Html.HiddenFor(m => m.Dvd.BorrowDate)
+        @Html.HiddenFor(m => m.Dvd.Borrower)
+        @Html.HiddenFor(m => m.Dvd.Type)
 
         <table>
             <tr>
                 <td>
-                    <input type="hidden" name="type" value="@Model.Book.Type" />
+                    <input type="hidden" name="type" value="@Model.Dvd.Type" />
                     <input type="submit" name="submit" value="Edit" />
                 </td>
             </tr>

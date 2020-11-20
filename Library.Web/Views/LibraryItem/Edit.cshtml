@@ -9,3 +9,13 @@ else if (Model.Book != null)
 {
     await Html.RenderPartialAsync("_BookEdit", Model);
 }
+
+else if (Model.Dvd != null)
+{
+    await Html.RenderPartialAsync("_DvdEdit", Model);
+}
+
+else
+{
+    await Html.RenderPartialAsync("_ReferenceBookEdit", Model);
+}

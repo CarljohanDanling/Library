@@ -11,7 +11,7 @@ namespace Library.Data
         Task<List<LibraryItem>> GetLibraryItems();
         Task<LibraryItem> GetLibraryItem(int id);
         Task<bool> CreateLibraryItem(LibraryItem libraryItem);
-        Task EditLibraryItem();
+        Task EditLibraryItem(LibraryItem libraryItem);
         Task CheckOutLibraryItem(LibraryItem libraryItem);
         Task CheckInLibraryItem(LibraryItem libraryItem);
 

@@ -8,20 +8,26 @@ namespace Library.Web.Models
 {
     public class AudioBookEdit
     {
+        [Required]
         public int Id { get; set; }
 
+        [Required]
         public string Title { get; set; }
-        
-        public string Type { get; set; }
 
+        [Required]
+        public string Type { get; set; }
+        
+        [Required]
         public int RunTimeMinutes { get; set; }
 
+        [Required]
         public bool IsBorrowable { get; set; }
         
         public string Borrower { get; set; }
 
         public DateTime BorrowDate { get; set; }
-
+        
+        [Required]
         public int CategoryId { get; set; }
 
         public List<CategoryModel> Categories{ get; set; }

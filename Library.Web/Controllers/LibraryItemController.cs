@@ -64,6 +64,16 @@ namespace Library.Web.Controllers
                     book.Categories = categoriesMapped;
                     viewModel.Book = book;
                     return View(viewModel);
+                case "Dvd":
+                    var dvd = _mapper.Map<DvdEdit>(libraryItem);
+                    dvd.Categories = categoriesMapped;
+                    viewModel.Dvd = dvd;
+                    return View(viewModel);
+                case "ReferenceBook":
+                    var referenceBook = _mapper.Map<ReferenceBookEdit>(libraryItem);
+                    referenceBook.Categories = categoriesMapped;
+                    viewModel.ReferenceBook = referenceBook;
+                    return View(viewModel);
             }
 
             return RedirectToAction("Index");
@@ -83,6 +93,14 @@ namespace Library.Web.Controllers
                     case "Book":
                         var book = _mapper.Map<LibraryItem>(viewModel.Book);
                         await _libraryItemService.EditLibraryItem(book, submit);
+                        break;
+                    case "Dvd":
+                        var dvd = _mapper.Map<LibraryItem>(viewModel.Dvd);
+                        await _libraryItemService.EditLibraryItem(dvd, submit);
+                        break;
+                    case "ReferenceBook":
+                        var referenceBook = _mapper.Map<LibraryItem>(viewModel.ReferenceBook);
+                        await _libraryItemService.EditLibraryItem(referenceBook, submit);
                         break;
                 }
             }

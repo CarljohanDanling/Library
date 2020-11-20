@@ -6,7 +6,7 @@ namespace Library.Web.Models
 {
     public class DvdCreate
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Cannot be empty")]
+        [Required]
         public string Title { get; set; }
 
         [Required]

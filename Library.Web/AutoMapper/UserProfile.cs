@@ -21,9 +21,13 @@ namespace Library.Web.AutoMapper
 
             CreateMap<LibraryItem, AudioBookEdit>();
             CreateMap<LibraryItem, BookEdit>();
+            CreateMap<LibraryItem, DvdEdit>();
+            CreateMap<LibraryItem, ReferenceBookEdit>();
 
             CreateMap<AudioBookEdit, LibraryItem>();
             CreateMap<BookEdit, LibraryItem>();
+            CreateMap<DvdEdit, LibraryItem>();
+            CreateMap<ReferenceBookEdit, LibraryItem>();
         }
     }
 }

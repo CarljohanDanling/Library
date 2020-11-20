@@ -52,9 +52,10 @@ namespace Library.Data
             }
         }
 
-        public async Task EditLibraryItem()
+        public async Task EditLibraryItem(LibraryItem libraryItem)
         {
-
+            _libraryContext.Update(libraryItem);
+            await _libraryContext.SaveChangesAsync();
         }
 
         public async Task CheckOutLibraryItem(LibraryItem libraryItem)

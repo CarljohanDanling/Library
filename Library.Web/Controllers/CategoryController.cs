@@ -65,12 +65,12 @@ namespace Library.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(CategoryModel category)
         {
-            var editCategoryDto = _mapper.Map<Category>(category);
+            var editCategory = _mapper.Map<Category>(category);
             bool isDuplicateNameError;
 
             if (ModelState.IsValid)
             {
-                isDuplicateNameError = await _categoryService.EditCategory(editCategoryDto);
+                isDuplicateNameError = await _categoryService.EditCategory(editCategory);
                 if (isDuplicateNameError)
                 {
                     ModelState.AddModelError("DuplicateNameError", "A category with that name already exist.");

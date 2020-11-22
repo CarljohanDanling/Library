@@ -13,6 +13,8 @@ namespace Library.Web.AutoMapper
 
             CreateMap<LibraryItem, LibraryItemBase>()
                 .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.Type));
+            
+            CreateMap<LibraryItemBase, LibraryItem>();
 
             CreateMap<DigitalMediaItem, LibraryItem>()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.DigitalMediaItemType));
@@ -25,25 +27,6 @@ namespace Library.Web.AutoMapper
 
             CreateMap<LibraryItem, DigitalMediaItem>()
                 .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.Type));
-
-            CreateMap<LibraryItem, AudioBook>();
-
-            CreateMap<LibraryItemBase, LibraryItem>();
-
-            CreateMap<AudioBookCreate, LibraryItem>();
-            CreateMap<BookCreate, LibraryItem>();
-            CreateMap<DvdCreate, LibraryItem>();
-            CreateMap<ReferenceBookCreate, LibraryItem>();
-
-            CreateMap<LibraryItem, AudioBookEdit>();
-            CreateMap<LibraryItem, BookEdit>();
-            CreateMap<LibraryItem, DvdEdit>();
-            CreateMap<LibraryItem, ReferenceBookEdit>();
-
-            CreateMap<AudioBookEdit, LibraryItem>();
-            CreateMap<BookEdit, LibraryItem>();
-            CreateMap<DvdEdit, LibraryItem>();
-            CreateMap<ReferenceBookEdit, LibraryItem>();
         }
     }
 }

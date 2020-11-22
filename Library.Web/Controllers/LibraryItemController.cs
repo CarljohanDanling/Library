@@ -36,7 +36,7 @@ namespace Library.Web.Controllers
                 LibraryItemBase = new LibraryItemBase()
             };
 
-            var sortedItems = Sorter(viewModel, sortOption);
+            var sortedItems = SortHandler(viewModel, sortOption);
 
             return View(sortedItems);
         }
@@ -160,7 +160,7 @@ namespace Library.Web.Controllers
             }
         }
 
-        private LibraryItemViewModel Sorter(LibraryItemViewModel viewModel, string sortOption)
+        private LibraryItemViewModel SortHandler(LibraryItemViewModel viewModel, string sortOption)
         {
             var sessionSorting = HttpContext.Session.GetString("Sorting");
 

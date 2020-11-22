@@ -2,7 +2,6 @@
 {
     public enum MediaItemCategory
     {
-        NotCategorized,
         DigitalMedia,
         NonDigitalMedia
     }

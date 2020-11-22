@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Library.Web.Models
@@ -8,6 +7,7 @@ namespace Library.Web.Models
     {
         [Required]
         [Range(1, int.MaxValue)]
+        [Display(Name = "Length (minutes)")]
         public override int RunTimeMinutes { get; set; }
 
         [Required]

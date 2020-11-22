@@ -1,7 +1,5 @@
 ﻿using Library.Data.Database.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Library.Data
@@ -15,6 +13,5 @@ namespace Library.Data
         Task CheckOutLibraryItem(LibraryItem libraryItem);
         Task CheckInLibraryItem(LibraryItem libraryItem);
         Task<bool> DeleteLibraryItem(LibraryItem libraryItem);
-
     }
 }

@@ -9,9 +9,14 @@
                     <td>
                         You want to delete: @Model.Title?
                     </td>
-                          </tr>
-                <tr><td><span class="text-danger">@Html.ValidationMessage("NonBorrowableError")</span></td></tr>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="text-danger">@Html.ValidationMessage("NonBorrowableError")</span>
+                    </td>
+                </tr>
             </table>
+
             @Html.HiddenFor(m => m.Id)
             @Html.HiddenFor(m => m.ItemType)
             @Html.HiddenFor(m => m.IsBorrowable)

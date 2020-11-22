@@ -2,10 +2,8 @@
 using Library.Data.Database.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Library.Engine.ExtensionMethods;
-
 
 namespace Library.Engine
 {
@@ -91,7 +89,6 @@ namespace Library.Engine
 
             await _libraryItemRepository.CheckInLibraryItem(libraryItem);
         }
-
 
         private List<LibraryItem> AddAcronymToTitle(List<LibraryItem> items)
         {

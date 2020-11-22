@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Library.Web.Models
 {
-    public class DvdCreate
+    public class DvdCreate : LibraryItemBase
     {
         [Required]
-        public string Title { get; set; }
-
-        [Required]
-        [Range(1, Double.PositiveInfinity)]
-        public int RunTimeMinutes { get; set; }
-
-        [Required]
-        public string Type = "Dvd";
-
-        [Required]
-        public int CategoryId { get; set; }
+        [Range(1, Int32.MaxValue)]
+        public override int RunTimeMinutes { get; set; }
     }
 }

@@ -7,22 +7,22 @@
         @Html.ValidationSummary(true, "ValidationSummary")
         <ol>
             <li>
-                @Html.LabelFor(m => m.Book.Title)
-                @Html.TextBoxFor(m => m.Book.Title)
-                @Html.ValidationMessageFor(m => m.Book.Title)
+                @Html.LabelFor(m => m.ReferenceBook.Title)
+                @Html.TextBoxFor(m => m.ReferenceBook.Title)
+                @Html.ValidationMessageFor(m => m.ReferenceBook.Title)
             </li>
             <li>
-                @Html.LabelFor(m => m.Book.Author)
-                @Html.TextBoxFor(m => m.Book.Author)
-                @Html.ValidationMessageFor(m => m.Book.Author)
+                @Html.LabelFor(m => m.ReferenceBook.Author)
+                @Html.TextBoxFor(m => m.ReferenceBook.Author)
+                @Html.ValidationMessageFor(m => m.ReferenceBook.Author)
             </li>
             <li>
-                @Html.LabelFor(m => m.Book.Pages)
-                @Html.TextBoxFor(m => m.Book.Pages, new { @type = "number" })
-                @Html.ValidationMessageFor(m => m.Book.Pages)
+                @Html.LabelFor(m => m.ReferenceBook.Pages)
+                @Html.TextBoxFor(m => m.ReferenceBook.Pages, new { @type = "number" })
+                @Html.ValidationMessageFor(m => m.ReferenceBook.Pages)
             </li>
         </ol>
-        @Html.DropDownListFor(m => m.Book.CategoryId, new SelectList(Model.Categories, "Id", "CategoryName"))
+        @Html.DropDownListFor(m => m.ReferenceBook.CategoryId, new SelectList(Model.Categories, "Id", "CategoryName"))
 
         @for (int i = 0; i < Model.Categories.Count; i++)
         {

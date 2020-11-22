@@ -48,37 +48,48 @@ namespace Library.Engine
                 case "Edit":
                     await _libraryItemRepository.EditLibraryItem(libraryItem);
                     break;
-                case "CheckOut":
+                case "Check Out":
                     await CheckOutLibraryItem(libraryItem);
                     break;
-                case "CheckIn":
+                case "Check In":
                     await CheckInLibraryItem(libraryItem);
                     break;
-                default: 
+                default:
                     throw new Exception("No submit action chosen");
+            }
+        }
+
+        public async Task<bool> DeleteLibraryItem(int id)
+        {
+            var itemToDelete = await _libraryItemRepository.GetLibraryItem(id);
+
+            try
+            {
+                var ableToDelete = await _libraryItemRepository.DeleteLibraryItem(itemToDelete);
+                return ableToDelete;
+            }
+            catch (InvalidOperationException)
+            {
+                throw;
             }
         }
 
         private async Task CheckOutLibraryItem(LibraryItem libraryItem)
         {
-            var item = await _libraryItemRepository.GetLibraryItem(libraryItem.Id);
+            libraryItem.IsBorrowable = false;
+            libraryItem.Borrower = libraryItem.Borrower;
+            libraryItem.BorrowDate = DateTime.Today;
 
-            item.IsBorrowable = false;
-            item.Borrower = libraryItem.Borrower;
-            item.BorrowDate = DateTime.Today;
-
-            await _libraryItemRepository.CheckOutLibraryItem(item);
+            await _libraryItemRepository.CheckOutLibraryItem(libraryItem);
         }
 
         private async Task CheckInLibraryItem(LibraryItem libraryItem)
         {
-            var item = await _libraryItemRepository.GetLibraryItem(libraryItem.Id);
+            libraryItem.IsBorrowable = true;
+            libraryItem.Borrower = null;
+            libraryItem.BorrowDate = null;
 
-            item.IsBorrowable = true;
-            item.Borrower = null;
-            item.BorrowDate = null;
-
-            await _libraryItemRepository.CheckInLibraryItem(item);
+            await _libraryItemRepository.CheckInLibraryItem(libraryItem);
         }
 
 

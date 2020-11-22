@@ -1,4 +1,4 @@
-﻿@model Library.Web.ViewModels.EditLibraryItemViewModel
+﻿@*@model Library.Web.ViewModels.EditLibraryItemViewModel
 
 @using (Html.BeginForm("Edit", "LibraryItem"))
 {
@@ -6,34 +6,35 @@
         <table width="50%">
             <tr>
                 <td>
-                    @Html.DisplayNameFor(m => m.Book.Title)
+                    @Html.DisplayNameFor(m => m.LibraryItem.Title)
                 </td>
                 <td>
-                    @Html.EditorFor(m => m.Book.Title)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    @Html.DisplayNameFor(m => m.Book.Type)
-                </td>
-                <td>
-                    @Model.Book.Type
+                    @Html.EditorFor(m => m.LibraryItem.Title)
                 </td>
             </tr>
             <tr>
                 <td>
-                    @Html.DisplayNameFor(m => m.Book.Author)
+                    @Html.DisplayNameFor(m => m.LibraryItem.ItemType)
                 </td>
                 <td>
-                    @Html.EditorFor(m => m.Book.Author)
+                    <select asp-for="LibraryItem.ItemType" asp-items="@Html.GetEnumSelectList<LibraryItemType>()">
+                    </select>
                 </td>
             </tr>
             <tr>
                 <td>
-                    @Html.DisplayNameFor(m => m.Book.Pages)
+                    @Html.DisplayNameFor(m => m.LibraryItem.Author)
                 </td>
                 <td>
-                    @Html.EditorFor(m => m.Book.Pages)
+                    @Html.EditorFor(m => m.LibraryItem.Author)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayNameFor(m => m.LibraryItem.Pages)
+                </td>
+                <td>
+                    @Html.EditorFor(m => m.LibraryItem.Pages)
                 </td>
             </tr>
             <tr>
@@ -41,35 +42,35 @@
                     @Html.DisplayNameFor(m => m.Categories.FirstOrDefault().CategoryName)
                 </td>
                 <td>
-                    @Html.DropDownListFor(m => m.Book.CategoryId, new SelectList(Model.Categories, "Id", "CategoryName"))
+                    @Html.DropDownListFor(m => m.LibraryItem.CategoryId, new SelectList(Model.Categories, "Id", "CategoryName"))
                 </td>
             </tr>
 
-            @if (Model.Book.Borrower != null)
+            @if (Model.LibraryItem.Borrower != null)
             {
                 <tr>
                     <td>
-                        @Html.DisplayNameFor(m => m.Book.Borrower)
+                        @Html.DisplayNameFor(m => m.LibraryItem.Borrower)
                     </td>
                     <td>
-                        @Html.TextBoxFor(m => m.Book.Borrower)
+                        @Html.TextBoxFor(m => m.LibraryItem.Borrower)
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        @Html.DisplayNameFor(m => m.Book.BorrowDate)
+                        @Html.DisplayNameFor(m => m.LibraryItem.BorrowDate)
                     </td>
                     <td>
-                        @Model.Book.BorrowDate.ToShortDateString()
+                        @Model.LibraryItem.BorrowDate.ToShortDateString()
                     </td>
                 </tr>
             }
 
-            @if (Model.Book.IsBorrowable)
+            @if (Model.LibraryItem.IsBorrowable)
             {
                 <tr>
                     <td>
-                        Enter name: @Html.TextBoxFor(m => m.Book.Borrower)
+                        Enter name: @Html.TextBoxFor(m => m.LibraryItem.Borrower)
                     </td>
                     <td>
                         <input type="submit" name="submit" value="CheckOut" />
@@ -87,19 +88,17 @@
             }
         </table>
 
-        @Html.HiddenFor(m => m.Book.Id)
-        @Html.HiddenFor(m => m.Book.IsBorrowable)
-        @Html.HiddenFor(m => m.Book.BorrowDate)
-        @Html.HiddenFor(m => m.Book.Borrower)
-        @Html.HiddenFor(m => m.Book.Type)
+        @Html.HiddenFor(m => m.LibraryItem.Id)
+        @Html.HiddenFor(m => m.LibraryItem.IsBorrowable)
+        @Html.HiddenFor(m => m.LibraryItem.BorrowDate)
+        @Html.HiddenFor(m => m.LibraryItem.Borrower)
 
         <table>
             <tr>
                 <td>
-                    <input type="hidden" name="type" value="@Model.Book.Type" />
                     <input type="submit" name="submit" value="Edit" />
                 </td>
             </tr>
         </table>
     </div>
-}
+}*@

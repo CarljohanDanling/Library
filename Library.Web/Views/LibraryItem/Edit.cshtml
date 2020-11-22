@@ -1,21 +1,11 @@
 ﻿@model Library.Web.ViewModels.EditLibraryItemViewModel
 
-@if (Model.AudioBook != null)
+@if (Model.DigitalMediaItem != null)
 {
-    await Html.RenderPartialAsync("_AudioBookEdit", Model);
-}
-
-else if (Model.Book != null)
-{
-    await Html.RenderPartialAsync("_BookEdit", Model);
-}
-
-else if (Model.Dvd != null)
-{
-    await Html.RenderPartialAsync("_DvdEdit", Model);
+    await Html.RenderPartialAsync("_DigitalMediaEdit", Model);
 }
 
 else
 {
-    await Html.RenderPartialAsync("_ReferenceBookEdit", Model);
+    await Html.RenderPartialAsync("_NonDigitalMediaEdit", Model);
 }

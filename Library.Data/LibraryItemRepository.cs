@@ -42,20 +42,36 @@ namespace Library.Data
             {
                 await _libraryContext.LibraryItems.AddAsync(libraryItem);
                 await _libraryContext.SaveChangesAsync();
-
-                return true;
             }
-
+            
             catch (Exception)
             {
                 return false;
             }
+
+            return true;
         }
 
         public async Task EditLibraryItem(LibraryItem libraryItem)
         {
             _libraryContext.Update(libraryItem);
             await _libraryContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> DeleteLibraryItem(LibraryItem libraryItem)
+        {
+            try
+            {
+                _libraryContext.Remove(libraryItem);
+                await _libraryContext.SaveChangesAsync();
+            }
+
+            catch (InvalidOperationException)
+            {
+                throw;
+            }
+
+            return true;
         }
 
         public async Task CheckOutLibraryItem(LibraryItem libraryItem)

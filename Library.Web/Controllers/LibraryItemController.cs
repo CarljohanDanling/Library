@@ -28,84 +28,17 @@ namespace Library.Web.Controllers
         public async Task<IActionResult> Index(string sortOption)
         {
             var libraryItems = await _libraryItemService.GetLibraryItems();
-            var libraryItemsMapped = _mapper.Map<List<LibraryItemModel>>(libraryItems);
+            var libraryItemsMapped = _mapper.Map<List<LibraryItemBase>>(libraryItems);
 
             var viewModel = new LibraryItemViewModel
             {
                 LibraryItems = libraryItemsMapped,
-                LibraryItemModel = new LibraryItemModel()
+                LibraryItemBase = new LibraryItemBase()
             };
 
             var sortedItems = Sorter(viewModel, sortOption);
 
             return View(sortedItems);
-        }
-
-        public async Task<IActionResult> Edit(int id)
-        {
-            var libraryItem = await _libraryItemService.GetLibraryItem(id);
-            var categories = await _categoryService.GetCategories();
-
-            var categoriesMapped = _mapper.Map<List<CategoryModel>>(categories);
-            var viewModel = new EditLibraryItemViewModel
-            {
-                Categories = categoriesMapped
-            };
-
-            switch (libraryItem.Type)
-            {
-                case "AudioBook":
-                    var audioBook = _mapper.Map<AudioBookEdit>(libraryItem);
-                    audioBook.Categories = categoriesMapped;
-                    viewModel.AudioBook = audioBook;
-                    return View(viewModel);
-                case "Book":
-                    var book = _mapper.Map<BookEdit>(libraryItem);
-                    book.Categories = categoriesMapped;
-                    viewModel.Book = book;
-                    return View(viewModel);
-                case "Dvd":
-                    var dvd = _mapper.Map<DvdEdit>(libraryItem);
-                    dvd.Categories = categoriesMapped;
-                    viewModel.Dvd = dvd;
-                    return View(viewModel);
-                case "ReferenceBook":
-                    var referenceBook = _mapper.Map<ReferenceBookEdit>(libraryItem);
-                    referenceBook.Categories = categoriesMapped;
-                    viewModel.ReferenceBook = referenceBook;
-                    return View(viewModel);
-            }
-
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Edit(EditLibraryItemViewModel viewModel, string submit, string type)
-        {
-            if (ModelState.IsValid)
-            {
-                switch (type)
-                {
-                    case "AudioBook":
-                        var audioBook = _mapper.Map<LibraryItem>(viewModel.AudioBook);
-                        await _libraryItemService.EditLibraryItem(audioBook, submit);
-                        break;
-                    case "Book":
-                        var book = _mapper.Map<LibraryItem>(viewModel.Book);
-                        await _libraryItemService.EditLibraryItem(book, submit);
-                        break;
-                    case "Dvd":
-                        var dvd = _mapper.Map<LibraryItem>(viewModel.Dvd);
-                        await _libraryItemService.EditLibraryItem(dvd, submit);
-                        break;
-                    case "ReferenceBook":
-                        var referenceBook = _mapper.Map<LibraryItem>(viewModel.ReferenceBook);
-                        await _libraryItemService.EditLibraryItem(referenceBook, submit);
-                        break;
-                }
-            }
-
-            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Create()
@@ -122,35 +55,109 @@ namespace Library.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateLibraryItemViewModel viewModel, string selectedType)
+        public async Task<IActionResult> Create(CreateLibraryItemViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                switch (selectedType)
+                switch (viewModel.MediaItemCategory)
                 {
-                    case "audioBook":
-                        var audioBook = _mapper.Map<LibraryItem>(viewModel.AudioBook);
-                        await _libraryItemService.CreateLibraryItem(audioBook);
+                    case MediaItemCategory.DigitalMedia:
+                        var digitalMedia = _mapper.Map<LibraryItem>(viewModel.DigitalMedia);
+                        await _libraryItemService.CreateLibraryItem(digitalMedia);
                         break;
-                    case "book":
-                        var book = _mapper.Map<LibraryItem>(viewModel.Book);
-                        await _libraryItemService.CreateLibraryItem(book);
-                        break;
-                    case "dvd":
-                        var dvd = _mapper.Map<LibraryItem>(viewModel.Dvd);
-                        await _libraryItemService.CreateLibraryItem(dvd);
-                        break;
-                    case "referenceBook":
-                        var referenceBook = _mapper.Map<LibraryItem>(viewModel.ReferenceBook);
-                        await _libraryItemService.CreateLibraryItem(referenceBook);
+                    case MediaItemCategory.NonDigitalMedia:
+                        var nonDigitalMedia = _mapper.Map<LibraryItem>(viewModel.NonDigitalMedia);
+                        await _libraryItemService.CreateLibraryItem(nonDigitalMedia);
                         break;
                 }
 
                 return RedirectToAction("Index");
             }
 
-            viewModel.SelectedType = selectedType;
             return View(viewModel);
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var categories = await _categoryService.GetCategories();
+            var libraryItem = await _libraryItemService.GetLibraryItem(id);
+            var categoriesMapped = _mapper.Map<List<CategoryModel>>(categories);
+
+            var viewModel = new EditLibraryItemViewModel
+            {
+                Categories = categoriesMapped
+            };
+
+            LibraryItemType libraryItemType;
+            Enum.TryParse(libraryItem.Type, out libraryItemType);
+
+            switch (libraryItemType)
+            {
+                case LibraryItemType.AudioBook:
+                case LibraryItemType.Dvd:
+                    var digitalMediaItem = _mapper.Map<DigitalMediaItem>(libraryItem);
+                    viewModel.DigitalMediaItem = digitalMediaItem;
+                    return View(viewModel);
+
+                case LibraryItemType.Book:
+                case LibraryItemType.ReferenceBook:
+                    var nonDigitalMediaItem = _mapper.Map<NonDigitalMediaItem>(libraryItem);
+                    viewModel.NonDigitalMediaItem = nonDigitalMediaItem;
+                    return View(viewModel);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditLibraryItemViewModel viewModel, MediaItemCategory mediaItemCategory, string submit)
+        {
+            var itemType = viewModel.LibraryItemType;
+
+            if (ModelState.IsValid)
+            {
+                switch (mediaItemCategory)
+                {
+                    case MediaItemCategory.DigitalMedia:
+                        var digitalItem = _mapper.Map<LibraryItem>(viewModel.DigitalMediaItem);
+                        await _libraryItemService.EditLibraryItem(digitalItem, submit);
+                        break;
+                    case MediaItemCategory.NonDigitalMedia:
+                        var nonDigitalItem = _mapper.Map<LibraryItem>(viewModel.NonDigitalMediaItem);
+                        await _libraryItemService.EditLibraryItem(nonDigitalItem, submit);
+                        break;
+                    default:
+                        break;
+                }
+
+                return RedirectToAction("Index");
+            }
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var item = await _libraryItemService.GetLibraryItem(id);
+            var itemMapped = _mapper.Map<LibraryItem, LibraryItemBase>(item);
+
+            return View(itemMapped);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(LibraryItemBase libraryItem)
+        {
+            if (libraryItem.IsBorrowable || libraryItem.ItemType == LibraryItemType.ReferenceBook)
+            {
+                await _libraryItemService.DeleteLibraryItem(libraryItem.Id);
+                return RedirectToAction("Index");
+            }
+
+            else
+            {
+                ModelState.AddModelError("NonBorrowableError", "The item is borrowed, please return it before deletion.");
+                return View(libraryItem);
+            }
         }
 
         private LibraryItemViewModel Sorter(LibraryItemViewModel viewModel, string sortOption)
@@ -176,7 +183,7 @@ namespace Library.Web.Controllers
                 {
                     HttpContext.Session.SetString("Sorting", "type");
                     viewModel.LibraryItems = viewModel.LibraryItems
-                        .OrderBy(l => l.Type).ToList();
+                        .OrderBy(l => l.ItemType).ToList();
                 }
             }
 

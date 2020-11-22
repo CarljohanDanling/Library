@@ -13,7 +13,7 @@
                 </li>
                 <li>
                     @Html.LabelFor(m => m.AudioBook.RunTimeMinutes)
-                    @Html.TextBoxFor(m => m.AudioBook.RunTimeMinutes, new { @type = "number" })
+                    @Html.EditorFor(m => m.AudioBook.RunTimeMinutes)
                     @Html.ValidationMessageFor(m => m.AudioBook.RunTimeMinutes)
                 </li>
             </ol>
@@ -25,7 +25,7 @@
                 @Html.HiddenFor(model => Model.Categories[i].Id)
             }
 
-            <input type="hidden" name="selectedType" value="audioBook" />
+            <input type="hidden" name="selectedType" value="@LibraryItemType.AudioBook" />
             <input type="submit" value="Create" />
         </div>
     }

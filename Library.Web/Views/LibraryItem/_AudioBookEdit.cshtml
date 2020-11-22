@@ -14,10 +14,10 @@
             </tr>
             <tr>
                 <td>
-                    @Html.DisplayNameFor(m => m.AudioBook.Type)
+                    @Html.DisplayNameFor(m => m.AudioBook.ItemType)
                 </td>
                 <td>
-                    @Model.AudioBook.Type
+                    <select asp-for="LibraryItemType" asp-items="@Html.GetEnumSelectList<LibraryItemType>()"></select>
                 </td>
             </tr>
             <tr>
@@ -52,7 +52,7 @@
                         @Html.DisplayNameFor(m => m.AudioBook.BorrowDate)
                     </td>
                     <td>
-                        @Model.AudioBook.BorrowDate.ToShortDateString()
+                        @Model.AudioBook.BorrowDate?.ToShortDateString()
                     </td>
                 </tr>
             }
@@ -83,12 +83,10 @@
         @Html.HiddenFor(m => m.AudioBook.IsBorrowable)
         @Html.HiddenFor(m => m.AudioBook.BorrowDate)
         @Html.HiddenFor(m => m.AudioBook.Borrower)
-        @Html.HiddenFor(m => m.AudioBook.Type)
         
         <table>
             <tr>
                 <td>
-                    <input type="hidden" name="type" value="@Model.AudioBook.Type" />
                     <input type="submit" name="submit" value="Edit" />
                 </td>
             </tr>

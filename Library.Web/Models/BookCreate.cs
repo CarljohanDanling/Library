@@ -2,21 +2,12 @@
 
 namespace Library.Web.Models
 {
-    public class BookCreate
+    public class BookCreate : LibraryItemBase
     {
         [Required]
-        public string Title { get; set; }
+        public override string Author { get; set; }
 
         [Required]
-        public string Author { get; set; }
-
-        [Required]
-        public int Pages { get; set; }
-
-        [Required]
-        public string Type = "Book";
-
-        [Required]
-        public int CategoryId { get; set; }
+        public override int Pages { get; set; }
     }
 }

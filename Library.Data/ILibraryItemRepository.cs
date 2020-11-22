@@ -14,6 +14,7 @@ namespace Library.Data
         Task EditLibraryItem(LibraryItem libraryItem);
         Task CheckOutLibraryItem(LibraryItem libraryItem);
         Task CheckInLibraryItem(LibraryItem libraryItem);
+        Task<bool> DeleteLibraryItem(LibraryItem libraryItem);
 
     }
 }

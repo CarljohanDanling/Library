@@ -12,7 +12,7 @@ namespace Library.Web.Models
         public int Id { get; set; }
 
         [Required]
-        public string Title { get; set; }
+        public LibraryItemType LibraryItemType { get; set; }
 
         [Required]
         public string Type { get; set; }

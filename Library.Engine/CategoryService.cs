@@ -40,7 +40,7 @@ namespace Library.Engine
 
         public async Task<bool> EditCategory(Category category)
         {
-            return await _categoryRepository.EditCategory(category);
+             return await _categoryRepository.EditCategory(category);
         }
 
         public async Task<bool> DeleteCategory(Category category)

@@ -8,7 +8,7 @@ namespace Library.Web.ViewModels
 {
     public class LibraryItemViewModel
     {
-        public List<LibraryItemModel> LibraryItems { get; set; }
-        public LibraryItemModel LibraryItemModel{ get; set; }
+        public List<LibraryItemBase> LibraryItems { get; set; }
+        public LibraryItemBase LibraryItemBase{ get; set; }
     }
 }

@@ -12,5 +12,6 @@ namespace Library.Engine
         Task<LibraryItem> GetLibraryItem(int id);
         Task<bool> CreateLibraryItem(LibraryItem libraryItem);
         Task EditLibraryItem(LibraryItem libraryItem, string submit);
+        Task<bool> DeleteLibraryItem(int id);
     }
 }

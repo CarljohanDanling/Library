@@ -1,0 +1,176 @@
+﻿@model Library.Web.ViewModels.EditLibraryItemViewModel
+
+@using (Html.BeginForm("Edit", "LibraryItem"))
+{
+    <div>
+        @Html.ValidationSummary(true, "ValidationSummary")
+
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.DigitalMediaItem.Title)
+                @Html.TextBoxFor(m => m.DigitalMediaItem.Title)
+                @Html.ValidationMessageFor(m => m.DigitalMediaItem.Title)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.LibraryItemType)
+                <select asp-for="DigitalMediaItem.ItemType" asp-items="@Html.GetEnumSelectList<LibraryItemType>()"></select>
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Categories.FirstOrDefault().CategoryName)
+                @Html.DropDownListFor(m => m.DigitalMediaItem.CategoryId, new SelectList(Model.Categories, "Id", "CategoryName"))
+            </li>
+            <li>
+                @Html.LabelFor(m => m.DigitalMediaItem.RunTimeMinutes)
+                @Html.EditorFor(m => m.DigitalMediaItem.RunTimeMinutes)
+                @Html.ValidationMessageFor(m => m.DigitalMediaItem.RunTimeMinutes)
+            </li>
+
+            @if (Model.DigitalMediaItem.Borrower != null)
+            {
+                <li>
+                    @Html.LabelFor(m => m.DigitalMediaItem.Borrower)
+                    @Html.TextBoxFor(m => m.DigitalMediaItem.Borrower)
+                </li>
+                <li>
+                    @Html.LabelFor(m => m.DigitalMediaItem.BorrowDate)
+                    @Model.DigitalMediaItem.BorrowDate
+                </li>
+            }
+        </ol>
+
+        @if (Model.DigitalMediaItem.IsBorrowable)
+        {
+            <div>
+                <p>To borrow this item, please enter borrower and click "Check Out"</p>
+                @Html.LabelFor(m => m.DigitalMediaItem.Borrower)
+                @Html.EditorFor(m => m.DigitalMediaItem.Borrower)
+
+                <input type="submit" name="submit" value="Check Out"/>
+            </div>
+        }
+
+        else
+        {
+            <div>
+                <p>Return this item by clicking button:</p>
+                <input type="submit" name="submit" value="Check In" />
+            </div>
+        }
+
+        @for (int i = 0; i < Model.Categories.Count; i++)
+        {
+            @Html.HiddenFor(model => Model.Categories[i].CategoryName)
+            @Html.HiddenFor(model => Model.Categories[i].Id)
+        }
+
+        @Html.HiddenFor(m => m.DigitalMediaItem.Id)
+        @Html.HiddenFor(m => m.DigitalMediaItem.IsBorrowable)
+        @Html.HiddenFor(m => m.DigitalMediaItem.BorrowDate)
+        @Html.HiddenFor(m => m.DigitalMediaItem.Borrower)
+
+        <input type="hidden" name="mediaItemCategory" value="@MediaItemCategory.DigitalMedia" />
+        <input type="submit" name="submit" value="Edit" />
+    </div>
+}
+
+
+@*<div>
+            <table width="60%">
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(m => m.DigitalMediaItem.Title)
+                    </td>
+                    <td>
+                        @Html.EditorFor(m => m.DigitalMediaItem.Title)
+                        @Html.ValidationMessageFor(m => m.DigitalMediaItem.Title)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(m => m.DigitalMediaItem.ItemType)
+                    </td>
+                    <td>
+                        <select asp-for="LibraryItemType" asp-items="@Html.GetEnumSelectList<LibraryItemType>()"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(m => m.Categories.FirstOrDefault().CategoryName)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(m => m.DigitalMediaItem.CategoryId, new SelectList(Model.Categories, "Id", "CategoryName"))
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayNameFor(m => m.DigitalMediaItem.RunTimeMinutes)
+                    </td>
+                    <td>
+                        @Html.EditorFor(m => m.DigitalMediaItem.RunTimeMinutes)
+                        <span asp-validation-for="DigitalMediaItem.RunTimeMinutes" class="text-danger"></span>
+                    </td>
+                </tr>
+
+                @if (Model.DigitalMediaItem.Borrower != null)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayNameFor(m => m.DigitalMediaItem.Borrower)
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.DigitalMediaItem.Borrower)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayNameFor(m => m.DigitalMediaItem.BorrowDate)
+                        </td>
+                        <td>
+                            @Model.DigitalMediaItem.BorrowDate.ToShortDateString()
+                        </td>
+                    </tr>
+                }
+
+                @if (Model.DigitalMediaItem.IsBorrowable)
+                {
+                    <tr>
+                        <td>
+                            Enter name: @Html.TextBoxFor(m => m.DigitalMediaItem.Borrower)
+                        </td>
+                        <td>
+                            <input type="submit" name="submit" value="CheckOut" />
+                        </td>
+                    </tr>
+                }
+
+                else
+                {
+                    <tr>
+                        <td>
+                            <input type="submit" name="submit" value="CheckIn" />
+                        </td>
+                    </tr>
+                }
+            </table>
+
+            @for (int i = 0; i < Model.Categories.Count; i++)
+            {
+                @Html.HiddenFor(model => Model.Categories[i].CategoryName)
+                @Html.HiddenFor(model => Model.Categories[i].Id)
+            }
+
+            @Html.HiddenFor(m => m.DigitalMediaItem.Id)
+            @Html.HiddenFor(m => m.DigitalMediaItem.IsBorrowable)
+            @Html.HiddenFor(m => m.DigitalMediaItem.BorrowDate)
+            @Html.HiddenFor(m => m.DigitalMediaItem.Borrower)
+
+            <table>
+                <tr>
+                    <td>
+                        <input type="hidden" name="mediaItemCategory" value="@MediaItemCategory.DigitalMedia" />
+                        <input type="submit" name="submit" value="Edit" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }*@

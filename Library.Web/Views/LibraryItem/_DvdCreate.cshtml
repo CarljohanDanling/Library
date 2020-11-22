@@ -13,7 +13,7 @@
             </li>
             <li>
                 @Html.LabelFor(m => m.Dvd.RunTimeMinutes)
-                @Html.TextBoxFor(m => m.Dvd.RunTimeMinutes, new { @type = "number" })
+                @Html.EditorFor(m => m.Dvd.RunTimeMinutes)
                 @Html.ValidationMessageFor(m => m.Dvd.RunTimeMinutes)
             </li>
         </ol>

@@ -1,0 +1,26 @@
+﻿@model LibraryItemBase
+
+<div class="form-group">
+    @using (Html.BeginForm("Delete", "LibraryItem"))
+    {
+        <div>
+            <table>
+                <tr>
+                    <td>
+                        You want to delete: @Model.Title?
+                    </td>
+                          </tr>
+                <tr><td><span class="text-danger">@Html.ValidationMessage("NonBorrowableError")</span></td></tr>
+            </table>
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.ItemType)
+            @Html.HiddenFor(m => m.IsBorrowable)
+            @Html.HiddenFor(m => m.Title)
+        </div>
+        <br />
+        <div>
+            <input type="submit" class="btn btn-danger" value="Delete" />
+            <a asp-action="Index" asp-controller="LibraryItem" class="btn btn-primary">Back to library items</a>
+        </div>
+    }
+</div>

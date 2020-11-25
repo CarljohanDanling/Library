@@ -13,11 +13,29 @@ namespace Library.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoryName = table.Column<string>(nullable: true)
+                    CategoryName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Employees",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: false),
+                    Salary = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
+                    IsCEO = table.Column<bool>(nullable: false),
+                    IsManager = table.Column<bool>(nullable: false),
+                    ManagerId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -26,8 +44,8 @@ namespace Library.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(nullable: false),
                     CategoryId = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
                     Author = table.Column<string>(nullable: true),
                     Pages = table.Column<int>(nullable: true),
                     RunTimeMinutes = table.Column<int>(nullable: true),
@@ -65,24 +83,19 @@ namespace Library.Data.Migrations
             migrationBuilder.InsertData(
                 table: "LibraryItems",
                 columns: new[] { "Id", "Author", "BorrowDate", "Borrower", "CategoryId", "IsBorrowable", "Pages", "RunTimeMinutes", "Title", "Type" },
-                values: new object[] { 1, "James Verne", null, null, 1, true, 200, null, "Jorden runt på 80 dagar", "Book" });
-
-            migrationBuilder.InsertData(
-                table: "LibraryItems",
-                columns: new[] { "Id", "Author", "BorrowDate", "Borrower", "CategoryId", "IsBorrowable", "Pages", "RunTimeMinutes", "Title", "Type" },
-                values: new object[] { 2, "Kristina Apppelqvist", null, null, 2, true, 200, null, "De blå damerna", "Book" });
-
-            migrationBuilder.InsertData(
-                table: "LibraryItems",
-                columns: new[] { "Id", "Author", "BorrowDate", "Borrower", "CategoryId", "IsBorrowable", "Pages", "RunTimeMinutes", "Title", "Type" },
-                values: new object[] { 3, null, new DateTime(2020, 11, 5, 14, 0, 0, 0, DateTimeKind.Unspecified), "Pär", 2, true, null, 100, "Metallica", "AudioBook" });
+                values: new object[,]
+                {
+                    { 2, "Kristina Apppelqvist", null, null, 1, true, 200, null, "De blå damerna", "Book" },
+                    { 3, null, new DateTime(2020, 11, 5, 14, 0, 0, 0, DateTimeKind.Unspecified), "Pär", 2, false, null, 100, "Metallica", "Dvd" },
+                    { 4, null, null, null, 2, true, null, 100, "Granner ljuger", "AudioBook" },
+                    { 1, "James Verne", new DateTime(2020, 6, 19, 14, 0, 0, 0, DateTimeKind.Unspecified), "Carina", 3, false, 200, null, "Jorden runt på 80 dagar", "Book" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_CategoryName",
                 table: "Categories",
                 column: "CategoryName",
-                unique: true,
-                filter: "[CategoryName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_LibraryItems_CategoryId",
@@ -92,6 +105,9 @@ namespace Library.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Employees");
+
             migrationBuilder.DropTable(
                 name: "LibraryItems");
 

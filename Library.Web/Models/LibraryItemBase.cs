@@ -19,6 +19,7 @@ namespace Library.Web.Models
         public virtual string Author { get; set; }
         public virtual int Pages { get; set; }
         public virtual int RunTimeMinutes { get; set; }
+
         public virtual string Borrower { get; set; }
         public DateTime? BorrowDate { get; set; }
         public CategoryModel Category{ get; set; }

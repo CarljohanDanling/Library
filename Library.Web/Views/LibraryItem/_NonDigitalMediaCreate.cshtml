@@ -4,22 +4,22 @@
     @using (Html.BeginForm("Create", "LibraryItem"))
     {
         <div>
-            @Html.ValidationSummary(true, "ValidationSummary")
+            <div asp-validation-summary="All" class="text-danger"></div>
             <ol>
                 <li>
                     @Html.LabelFor(m => m.NonDigitalMedia.Title)
                     @Html.TextBoxFor(m => m.NonDigitalMedia.Title)
-                    @Html.ValidationMessageFor(m => m.NonDigitalMedia.Title)
+                    <span asp-validation-for="NonDigitalMedia.Title" class="text-danger"></span>
                 </li>
                 <li>
                     @Html.LabelFor(m => m.NonDigitalMedia.Author)
                     @Html.EditorFor(m => m.NonDigitalMedia.Author)
-                    @Html.ValidationMessageFor(m => m.NonDigitalMedia.Author)
+                    <span asp-validation-for="NonDigitalMedia.Author" class="text-danger"></span>
                 </li>
                 <li>
                     @Html.LabelFor(m => m.NonDigitalMedia.Pages)
                     @Html.EditorFor(m => m.NonDigitalMedia.Pages)
-                    @Html.ValidationMessageFor(m => m.NonDigitalMedia.Pages)
+                    <span asp-validation-for="NonDigitalMedia.Pages" class="text-danger"></span>
                 </li>
                 <li>
                     @Html.LabelFor(m => m.NonDigitalMedia.Category)
@@ -38,6 +38,7 @@
                 @Html.HiddenFor(model => Model.Categories[i].Id)
             }
 
+            <input type="hidden" name="Borrower" value="@null" />
             <input type="hidden" name="mediaItemCategory" value="@MediaItemCategory.NonDigitalMedia" />
             <input type="submit" value="Create" />
         </div>

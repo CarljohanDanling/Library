@@ -11,6 +11,7 @@ namespace Library.Data.Database.Context
 
         public DbSet<LibraryItem> LibraryItems { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Employee> Employees { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,20 +24,19 @@ namespace Library.Data.Database.Context
                 .HasIndex(c => c.CategoryName)
                 .IsUnique();
 
-
             // SEED DATA
             modelBuilder.Entity<LibraryItem>().HasData(
                 new LibraryItem()
                 {
                     Id = 1,
-                    CategoryId = 1,
+                    CategoryId = 3,
                     Title = "Jorden runt på 80 dagar",
                     Author = "James Verne",
                     Pages = 200,
                     RunTimeMinutes = null,
-                    IsBorrowable = true,
-                    Borrower = null,
-                    BorrowDate = null,
+                    IsBorrowable = false,
+                    Borrower = "Carina",
+                    BorrowDate = new DateTime(2020, 06, 19, 14, 0, 0),
                     Type = "Book"
                 });
 
@@ -44,7 +44,7 @@ namespace Library.Data.Database.Context
                 new LibraryItem()
                 {
                     Id = 2,
-                    CategoryId = 2,
+                    CategoryId = 1,
                     Title = "De blå damerna",
                     Author = "Kristina Apppelqvist",
                     Pages = 200,
@@ -64,6 +64,19 @@ namespace Library.Data.Database.Context
                     IsBorrowable = false,
                     Borrower = "Pär",
                     BorrowDate = new DateTime(2020, 11, 05, 14, 00, 00),
+                    Type = "Dvd"
+                });
+
+            modelBuilder.Entity<LibraryItem>().HasData(
+                new LibraryItem()
+                {
+                    Id = 4,
+                    CategoryId = 2,
+                    Title = "Granner ljuger",
+                    RunTimeMinutes = 100,
+                    IsBorrowable = true,
+                    Borrower = null,
+                    BorrowDate = null,
                     Type = "AudioBook"
                 });
 

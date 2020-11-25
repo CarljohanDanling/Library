@@ -1,10 +1,8 @@
 ﻿using Library.Data.Database.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.Engine
+namespace Library.Engine.Interface
 {
     public interface ILibraryItemService
     {

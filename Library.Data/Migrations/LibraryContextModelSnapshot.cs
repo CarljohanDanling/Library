@@ -27,13 +27,13 @@ namespace Library.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CategoryName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryName")
-                        .IsUnique()
-                        .HasFilter("[CategoryName] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Categories");
 
@@ -53,6 +53,38 @@ namespace Library.Data.Migrations
                             Id = 3,
                             CategoryName = "Horror"
                         });
+                });
+
+            modelBuilder.Entity("Library.Data.Database.Models.Employee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsCEO")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsManager")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ManagerId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Salary")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("Library.Data.Database.Models.LibraryItem", b =>
@@ -84,6 +116,7 @@ namespace Library.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
@@ -100,8 +133,10 @@ namespace Library.Data.Migrations
                         {
                             Id = 1,
                             Author = "James Verne",
-                            CategoryId = 1,
-                            IsBorrowable = true,
+                            BorrowDate = new DateTime(2020, 6, 19, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            Borrower = "Carina",
+                            CategoryId = 3,
+                            IsBorrowable = false,
                             Pages = 200,
                             Title = "Jorden runt på 80 dagar",
                             Type = "Book"
@@ -110,7 +145,7 @@ namespace Library.Data.Migrations
                         {
                             Id = 2,
                             Author = "Kristina Apppelqvist",
-                            CategoryId = 2,
+                            CategoryId = 1,
                             IsBorrowable = true,
                             Pages = 200,
                             Title = "De blå damerna",
@@ -122,9 +157,18 @@ namespace Library.Data.Migrations
                             BorrowDate = new DateTime(2020, 11, 5, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             Borrower = "Pär",
                             CategoryId = 2,
-                            IsBorrowable = true,
+                            IsBorrowable = false,
                             RunTimeMinutes = 100,
                             Title = "Metallica",
+                            Type = "Dvd"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryId = 2,
+                            IsBorrowable = true,
+                            RunTimeMinutes = 100,
+                            Title = "Granner ljuger",
                             Type = "AudioBook"
                         });
                 });

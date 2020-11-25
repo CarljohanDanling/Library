@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.Data.SqlClient;
+using Library.Data.Interfaces;
 
 namespace Library.Data
 {

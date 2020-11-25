@@ -1,19 +1,17 @@
 using AutoMapper;
 using Library.Data;
 using Library.Data.Database.Context;
+using Library.Data.Interfaces;
 using Library.Engine;
+using Library.Engine.Interface;
 using Library.Web.AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Library.Web
 {
@@ -29,10 +27,17 @@ namespace Library.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(UserProfile));
+
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<ICategoryService, CategoryService>();
+
             services.AddTransient<ILibraryItemRepository, LibraryItemRepository>();
             services.AddTransient<ILibraryItemService, LibraryItemService>();
+
+            services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+            services.AddTransient<IEmployeeService, EmployeeService>();
+
+            services.AddTransient<ISalaryCalculator, SalaryCalculator>();
 
             services.AddControllersWithViews();
 

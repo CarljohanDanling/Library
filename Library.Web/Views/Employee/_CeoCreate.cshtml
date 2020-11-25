@@ -1,0 +1,43 @@
+﻿@model Library.Web.ViewModels.CreateEmployeeViewModel
+@using Library.Engine.Enums;
+
+<div class="ceo option">
+    @using (Html.BeginForm("Create", "Employee"))
+    {
+        <div>
+            <div asp-validation-summary="None" class="text-danger"></div>
+            <ol>
+                <li>
+                    @Html.LabelFor(m => m.Employee.FirstName)
+                    @Html.TextBoxFor(m => m.Employee.FirstName)
+                    <span asp-validation-for="Employee.FirstName" class="text-danger"></span>
+                </li>
+                <li>
+                    @Html.LabelFor(m => m.Employee.LastName)
+                    @Html.TextBoxFor(m => m.Employee.LastName)
+                    <span asp-validation-for="Employee.LastName" class="text-danger"></span>
+                </li>
+                <li>
+                    @Html.LabelFor(m => m.Employee.Rank)
+                    @Html.EditorFor(m => m.Employee.Rank)
+                    <span asp-validation-for="Employee.Rank" class="text-danger"></span>
+                </li>
+            </ol>
+
+
+            @for (int i = 0; i < Model.NonRegularEmployee.Count; i++)
+            {
+                @Html.HiddenFor(model => Model.NonRegularEmployee[i].Name)
+                @Html.HiddenFor(model => Model.NonRegularEmployee[i].Id)
+            }
+
+            <input type="hidden" name="IsManager" value="false" />
+            <input type="hidden" name="IsCEO" value="false" />
+            <input type="hidden" name="Id" value="0" />
+            <input type="hidden" name="employeeType" value="@EmployeeType.CEO" />
+
+            <input type="submit" value="Create" />
+            <span class="text-danger">@Html.ValidationMessage("OnlyOneCEOError")</span>
+        </div>
+    }
+</div>

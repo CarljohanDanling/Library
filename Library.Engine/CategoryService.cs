@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using Library.Data;
 using Library.Data.Database.Models;
-using Library.Data.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using Library.Engine.Interface;
+using Library.Data.Interfaces;
 
 namespace Library.Engine
 {
@@ -55,7 +53,7 @@ namespace Library.Engine
             }
 
             await _categoryRepository.DeleteCategory(category);
-
+            
             return true;
         }
     }

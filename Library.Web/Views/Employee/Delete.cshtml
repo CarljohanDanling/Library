@@ -1,0 +1,29 @@
+﻿@model EmployeeModel
+
+<div class="form-group">
+    @using (Html.BeginForm("Delete", "Employee"))
+    {
+        <div>
+            <table>
+                <tr>
+                    <td>
+                        You want to delete: @Model.Name?
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="text-danger">@Html.ValidationMessage("IsManagingAnotherError")</span>
+                    </td>
+                </tr>
+            </table>
+
+            @Html.HiddenFor(m => m.Id)
+        </div>
+        <br />
+        <div>
+            <input type="hidden" name="Name" value="@Model.Name" />
+            <input type="submit" class="btn btn-danger" value="Delete" />
+            <a asp-action="Index" asp-controller="Employee" class="btn btn-primary">Back to employees</a>
+        </div>
+    }
+</div>

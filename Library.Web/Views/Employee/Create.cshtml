@@ -1,0 +1,54 @@
+﻿@model Library.Web.ViewModels.CreateEmployeeViewModel
+@using Library.Engine.Enums
+
+<div>
+    <select>
+        @*
+            // I use a comparison in the "selected" to remain the choosen value after posting.
+        *@
+        <option value="default" selected="@(Model.EmployeeType == EmployeeType.NonCategorized)">Choose what type of employee to create</option>
+        <option value="regularEmployee" selected="@(Model.EmployeeType == EmployeeType.Employee)">Regular employee</option>
+        <option value="manager" selected="@(Model.EmployeeType == EmployeeType.Manager)">Manager</option>
+        <option value="ceo" selected="@(Model.EmployeeType == EmployeeType.CEO)">CEO</option>
+    </select>
+</div>
+
+@await Html.PartialAsync("_RegularEmployeeCreate", Model)
+@await Html.PartialAsync("_ManagerCreate", Model)
+@await Html.PartialAsync("_CeoCreate", Model)
+
+
+
+
+@*
+    // I partly stole this JS code from a page.
+    // I analyzed it, understood it and customized it to fit my solution.
+    // If show/hide the different fields depending on what selection is active.
+*@
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("select").change(function () {
+                $("select option:selected").each(function () {
+                    if ($(this).attr("value") == "regularEmployee") {
+                        $(".option").hide();
+                        $(".regularEmployee").show();
+                    }
+                    if ($(this).attr("value") == "manager") {
+                        $(".option").hide();
+                        $(".manager").show();
+                    }
+                    if ($(this).attr("value") == "ceo") {
+                        $(".option").hide();
+                        $(".ceo").show();
+                    }
+                    if ($(this).attr("value") == "default") {
+                        $(".option").hide();
+                    }
+                });
+            }).change();
+        });
+    </script>
+}

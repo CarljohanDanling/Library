@@ -3,27 +3,26 @@
 @using (Html.BeginForm("Edit", "LibraryItem"))
 {
     <div>
-        @Html.ValidationSummary(true, "ValidationSummary")
-
+        <div asp-validation-summary="All" class="text-danger"></div>
         <ol>
             <li>
                 @Html.LabelFor(m => m.NonDigitalMediaItem.Title)
                 @Html.TextBoxFor(m => m.NonDigitalMediaItem.Title)
-                @Html.ValidationMessageFor(m => m.NonDigitalMediaItem.Title)
+                <span asp-validation-for="NonDigitalMediaItem.Title" class="text-danger"></span>
             </li>
             <li>
                 @Html.LabelFor(m => m.NonDigitalMediaItem.Author)
                 @Html.EditorFor(m => m.NonDigitalMediaItem.Author)
-                @Html.ValidationMessageFor(m => m.NonDigitalMediaItem.Author)
+                <span asp-validation-for="NonDigitalMediaItem.Author" class="text-danger"></span>
             </li>
             <li>
                 @Html.LabelFor(m => m.NonDigitalMediaItem.Pages)
                 @Html.EditorFor(m => m.NonDigitalMediaItem.Pages)
-                @Html.ValidationMessageFor(m => m.NonDigitalMediaItem.Pages)
+                <span asp-validation-for="NonDigitalMediaItem.Pages" class="text-danger"></span>
             </li>
             <li>
                 @Html.LabelFor(m => m.LibraryItemType)
-                <select asp-for="NonDigitalMediaItem.ItemType" asp-items="@Html.GetEnumSelectList<LibraryItemType>()"></select>
+                <select asp-for="NonDigitalMediaItem.NonDigitalMediaItemType" asp-items="@Html.GetEnumSelectList<NonDigitalMediaItemType>()"></select>
             </li>
             <li>
                 @Html.LabelFor(m => m.Categories.FirstOrDefault().CategoryName)
@@ -35,6 +34,7 @@
                 <li>
                     @Html.LabelFor(m => m.NonDigitalMediaItem.Borrower)
                     @Html.TextBoxFor(m => m.NonDigitalMediaItem.Borrower)
+                    <span asp-validation-for="NonDigitalMediaItem.Borrower" class="text-danger"></span>
                 </li>
                 <li>
                     @Html.LabelFor(m => m.NonDigitalMediaItem.BorrowDate)
@@ -49,8 +49,8 @@
                 <p>To borrow this item, please enter borrower and click "Check Out"</p>
                 @Html.LabelFor(m => m.NonDigitalMediaItem.Borrower)
                 @Html.EditorFor(m => m.NonDigitalMediaItem.Borrower)
-
                 <input type="submit" name="submit" value="Check Out" />
+                <span class="text-danger">@Html.ValidationMessage("BorrowerError")</span>
             </div>
         }
 
@@ -77,105 +77,3 @@
         <input type="submit" name="submit" value="Edit" />
     </div>
 }
-
-
-@*<div>
-            <table width="60%">
-                <tr>
-                    <td>
-                        @Html.DisplayNameFor(m => m.DigitalMediaItem.Title)
-                    </td>
-                    <td>
-                        @Html.EditorFor(m => m.DigitalMediaItem.Title)
-                        @Html.ValidationMessageFor(m => m.DigitalMediaItem.Title)
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Html.DisplayNameFor(m => m.DigitalMediaItem.ItemType)
-                    </td>
-                    <td>
-                        <select asp-for="LibraryItemType" asp-items="@Html.GetEnumSelectList<LibraryItemType>()"></select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Html.DisplayNameFor(m => m.Categories.FirstOrDefault().CategoryName)
-                    </td>
-                    <td>
-                        @Html.DropDownListFor(m => m.DigitalMediaItem.CategoryId, new SelectList(Model.Categories, "Id", "CategoryName"))
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Html.DisplayNameFor(m => m.DigitalMediaItem.RunTimeMinutes)
-                    </td>
-                    <td>
-                        @Html.EditorFor(m => m.DigitalMediaItem.RunTimeMinutes)
-                        <span asp-validation-for="DigitalMediaItem.RunTimeMinutes" class="text-danger"></span>
-                    </td>
-                </tr>
-
-                @if (Model.DigitalMediaItem.Borrower != null)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayNameFor(m => m.DigitalMediaItem.Borrower)
-                        </td>
-                        <td>
-                            @Html.TextBoxFor(m => m.DigitalMediaItem.Borrower)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.DisplayNameFor(m => m.DigitalMediaItem.BorrowDate)
-                        </td>
-                        <td>
-                            @Model.DigitalMediaItem.BorrowDate.ToShortDateString()
-                        </td>
-                    </tr>
-                }
-
-                @if (Model.DigitalMediaItem.IsBorrowable)
-                {
-                    <tr>
-                        <td>
-                            Enter name: @Html.TextBoxFor(m => m.DigitalMediaItem.Borrower)
-                        </td>
-                        <td>
-                            <input type="submit" name="submit" value="CheckOut" />
-                        </td>
-                    </tr>
-                }
-
-                else
-                {
-                    <tr>
-                        <td>
-                            <input type="submit" name="submit" value="CheckIn" />
-                        </td>
-                    </tr>
-                }
-            </table>
-
-            @for (int i = 0; i < Model.Categories.Count; i++)
-            {
-                @Html.HiddenFor(model => Model.Categories[i].CategoryName)
-                @Html.HiddenFor(model => Model.Categories[i].Id)
-            }
-
-            @Html.HiddenFor(m => m.DigitalMediaItem.Id)
-            @Html.HiddenFor(m => m.DigitalMediaItem.IsBorrowable)
-            @Html.HiddenFor(m => m.DigitalMediaItem.BorrowDate)
-            @Html.HiddenFor(m => m.DigitalMediaItem.Borrower)
-
-            <table>
-                <tr>
-                    <td>
-                        <input type="hidden" name="mediaItemCategory" value="@MediaItemCategory.DigitalMedia" />
-                        <input type="submit" name="submit" value="Edit" />
-                    </td>
-                </tr>
-            </table>
-        </div>
-    }*@

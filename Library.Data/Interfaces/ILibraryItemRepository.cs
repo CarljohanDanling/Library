@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Library.Data
+namespace Library.Data.Interfaces
 {
     public interface ILibraryItemRepository
     {

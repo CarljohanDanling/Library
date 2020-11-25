@@ -5,7 +5,7 @@
         @*
             // I use a comparison in the "selected" to remain the choosen value after posting.
         *@
-        <option value="default" selected="@(Model.MediaItemCategory == MediaItemCategory.NonDigitalMedia)">Choose what type of media item to create</option>
+        <option value="default" selected="@(Model.MediaItemCategory == MediaItemCategory.NonCategorized)">Choose what type of media item to create</option>
         <option value="digitalMedia" selected="@(Model.MediaItemCategory == MediaItemCategory.DigitalMedia)">Digital Media</option>
         <option value="nonDigitalMedia" selected="@(Model.MediaItemCategory == MediaItemCategory.NonDigitalMedia)">Non Digital Media</option>
     </select>

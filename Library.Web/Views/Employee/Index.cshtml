@@ -1,0 +1,50 @@
+﻿@model Library.Web.ViewModels.EmployeeViewModel
+
+<div>
+    @Html.ActionLink("Create employee", "Create")
+</div>
+
+<br />
+
+<div>
+    <table width="100%">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(m => m.Employee.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.Employee.Salary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.Employee.EmployeeType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.Employee.ManagedBy)
+            </th>
+        </tr>
+
+        @foreach (var emp in Model.Employees)
+        {
+            <tr>
+                <td>
+                    @emp.Name
+                </td>
+                <td>
+                    @emp.Salary
+                </td>
+                <td>
+                    @emp.EmployeeType
+                </td>
+                <td>
+                    @emp.ManagedBy
+                </td>
+                <td>
+                    <a asp-action="Edit" class="btn btn-primary" asp-route-id="@emp.Id">Edit</a>
+                </td>
+                <td>
+                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@emp.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

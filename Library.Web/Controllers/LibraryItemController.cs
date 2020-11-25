@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Library.Data.Database.Models;
-using Library.Engine;
 using Library.Web.Models;
 using Library.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Library.Engine.Interface;
 
 namespace Library.Web.Controllers
 {
@@ -119,19 +119,31 @@ namespace Library.Web.Controllers
                 switch (mediaItemCategory)
                 {
                     case MediaItemCategory.DigitalMedia:
+                        if (submit == "Check Out" && viewModel.DigitalMediaItem.Borrower == null)
+                        {
+                            ModelState.AddModelError("BorrowerError", "Must enter borrower");
+                            return View(viewModel);
+                        }
+
                         var digitalItem = _mapper.Map<LibraryItem>(viewModel.DigitalMediaItem);
                         await _libraryItemService.EditLibraryItem(digitalItem, submit);
                         break;
+
                     case MediaItemCategory.NonDigitalMedia:
+                        if (submit == "Check Out" && viewModel.NonDigitalMediaItem.Borrower == null)
+                        {
+                            ModelState.AddModelError("BorrowerError", "Must enter borrower");
+                            return View(viewModel);
+                        }
+
                         var nonDigitalItem = _mapper.Map<LibraryItem>(viewModel.NonDigitalMediaItem);
                         await _libraryItemService.EditLibraryItem(nonDigitalItem, submit);
-                        break;
-                    default:
                         break;
                 }
 
                 return RedirectToAction("Index");
             }
+
             return View(viewModel);
         }
 

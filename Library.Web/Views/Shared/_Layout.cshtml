@@ -17,21 +17,20 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                @*<a class="navbar-brand" asp-controller="Home" asp-action="Index"></a>*@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Category" asp-action="Index">Categories</a>
+                        <li class="nav-item" style="padding:4px">
+                            <a class="btn btn-secondary btn-sm" asp-controller="Category" asp-action="Index">Categories</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="LibraryItem" asp-action="Index">Library Items</a>
+                        <li class="nav-item" style="padding:4px">
+                            <a class="btn btn-secondary btn-sm" asp-controller="LibraryItem" asp-action="Index">Library Items</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Employee" asp-action="Index">Employee Manager</a>
+                        <li class="nav-item" style="padding:4px">
+                            <a class="btn btn-secondary btn-sm" asp-controller="Employee" asp-action="Index">Employee Manager</a>
                         </li>
                     </ul>
                 </div>
@@ -43,6 +42,11 @@
             @RenderBody()
         </main>
     </div>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2020 - Carljohan Danling
+        </div>
+    </footer>
 
     @RenderSection("Scripts", required: false)
 </body>

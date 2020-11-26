@@ -1,11 +1,81 @@
-﻿@model EmployeeModel
+﻿@model Library.Web.ViewModels.EditEmployeeViewModel
+@using Library.Engine.Enums
 
 @using (Html.BeginForm("Edit", "Employee"))
 {
+    <div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <ol style="list-style-type:none">
+            <li>
+                @Html.LabelFor(m => m.Employee.FirstName)
+                @Html.EditorFor(m => m.Employee.FirstName)
+                <span asp-validation-for="Employee.FirstName" class="text-danger"></span>
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Employee.LastName)
+                @Html.EditorFor(m => m.Employee.LastName)
+                <span asp-validation-for="Employee.LastName" class="text-danger"></span>
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Employee.Rank)
+                @Html.EditorFor(m => m.Employee.Rank)
+                <span asp-validation-for="Employee.Rank" class="text-danger"></span>
+            </li>
 
+            @if (Model.Employee.EmployeeType == EmployeeType.Employee)
+            {
+                <li>
+                    @Html.LabelFor(m => m.Employee.ManagedBy)
+                    @Html.DropDownListFor(m => m.Employee.ManagerId, new SelectList(Model.NonRegularEmployees
+                        .Where(emp => emp.IsManager), "Id", "Name"))
+                </li>
+                <li>
+                    @Html.LabelFor(m => m.Employee.EmployeeType)
+                    <select asp-for="Employee.EmployeeType" asp-items="@Html.GetEnumSelectList<EmployeeType>()">
+                    </select>
+                </li>
+            }
 
+            else if (Model.Employee.EmployeeType == EmployeeType.Manager)
+            {
+                <li>
+                    @Html.LabelFor(m => m.Employee.ManagedBy)
+                    @Html.DropDownListFor(m => m.Employee.ManagerId, new SelectList(Model.NonRegularEmployees
+                        .Where(emp => emp.IsManager || emp.IsCEO), "Id", "Name"))
+                </li>
+                <li>
+                    @Html.LabelFor(m => m.Employee.EmployeeType)
+                    <select asp-for="Employee.EmployeeType" asp-items="@Html.GetEnumSelectList<EmployeeType>()">
+                    </select>
+                </li>
+            }
 
+            else
+            {
+                <li>
+                    @Html.LabelFor(m => m.Employee.EmployeeType)
+                    <select asp-for="Employee.EmployeeType" asp-items="@Html.GetEnumSelectList<EmployeeType>()">
+                    </select>
+                </li>
+            }
 
+            <li>
+                <input type="submit" class="btn btn-primary" value="Edit" />
+                <span class="text-danger">@Html.ValidationMessage("ManagerToRegularEmployeeError")</span>
+                <span class="text-danger">@Html.ValidationMessage("OnlyOneCEOError")</span>
+            </li>
+        </ol>
 
+        @for (int i = 0; i < Model.NonRegularEmployees.Count; i++)
+        {
+            @Html.HiddenFor(model => Model.NonRegularEmployees[i].Name)
+            @Html.HiddenFor(model => Model.NonRegularEmployees[i].Id)
+            @Html.HiddenFor(model => Model.NonRegularEmployees[i].IsCEO)
+            @Html.HiddenFor(model => Model.NonRegularEmployees[i].IsManager)
+        }
 
+        <input type="hidden" name="currentType" value="@Model.Employee.EmployeeType" />
+        @Html.HiddenFor(m => m.Employee.Id)
+
+    </div>
 }

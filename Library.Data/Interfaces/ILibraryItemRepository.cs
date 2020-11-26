@@ -10,8 +10,8 @@ namespace Library.Data.Interfaces
         Task<LibraryItem> GetLibraryItem(int id);
         Task<bool> CreateLibraryItem(LibraryItem libraryItem);
         Task EditLibraryItem(LibraryItem libraryItem);
-        Task CheckOutLibraryItem(LibraryItem libraryItem);
-        Task CheckInLibraryItem(LibraryItem libraryItem);
+        Task BorrowLibraryItem(LibraryItem libraryItem);
+        Task ReturnLibraryItem(LibraryItem libraryItem);
         Task<bool> DeleteLibraryItem(LibraryItem libraryItem);
     }
 }

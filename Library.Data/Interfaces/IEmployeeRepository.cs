@@ -9,7 +9,10 @@ namespace Library.Data.Interfaces
         Task<Employee> GetEmployee(int id);
         Task<List<Employee>> GetAllEmployees();
         Task<List<Employee>> GetNonRegularEmployees();
+        Task<int> GetManagerId();
+        Task RemoveManagerIdFromEmployees(int id);
         Task CreateEmployee(Employee employee);
+        Task EditEmployee(Employee employee);
         Task<bool> DeleteEmployee(Employee employee);
         Task<bool> CheckIfCeoAlreadyExist();
         Task<bool> CheckIfManagingOther(int id);

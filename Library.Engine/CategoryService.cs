@@ -41,6 +41,8 @@ namespace Library.Engine
              return await _categoryRepository.EditCategory(category);
         }
 
+        // I make a check if the category to delete
+        // is referenced in any library item.
         public async Task<bool> DeleteCategory(Category category)
         {
             var libraryItems = await _libraryItemRepository.GetLibraryItems();

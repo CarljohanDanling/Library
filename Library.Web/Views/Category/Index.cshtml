@@ -1,18 +1,27 @@
 ﻿@model List<CategoryModel>
+
 <div>
     @Html.ActionLink("Create category", "Create")
 </div>
 
 <br />
 
-<h4>Categories:</h4>
-
 <div>
     <table>
+        <tr>
+            <th>
+                Categories
+            </th>
+        </tr>
+    </table>
+</div>
+
+<div>
+    <table width="30%">
         @foreach (var category in Model)
         {
             <tr>
-                <td style="width: 70%">
+                <td>
                     @category.CategoryName
                 </td>
                 <td>

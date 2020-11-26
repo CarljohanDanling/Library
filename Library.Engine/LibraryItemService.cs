@@ -30,6 +30,8 @@ namespace Library.Engine
             return await _libraryItemRepository.GetLibraryItem(id);
         }
 
+        // This might be ugly, but I set all library items that are not a reference book
+        // to "IsBorrowable = true". This is because a reference book shouldn't be borrowable.
         public async Task<bool> CreateLibraryItem(LibraryItem libraryItem)
         {
             if (libraryItem.Type != "ReferenceBook")
@@ -47,11 +49,11 @@ namespace Library.Engine
                 case "Edit":
                     await _libraryItemRepository.EditLibraryItem(libraryItem);
                     break;
-                case "Check Out":
-                    await CheckOutLibraryItem(libraryItem);
+                case "Borrow":
+                    await BorrowLibraryItem(libraryItem);
                     break;
-                case "Check In":
-                    await CheckInLibraryItem(libraryItem);
+                case "Return":
+                    await ReturnLibraryItem(libraryItem);
                     break;
                 default:
                     throw new Exception("No submit action chosen");
@@ -73,22 +75,22 @@ namespace Library.Engine
             }
         }
 
-        private async Task CheckOutLibraryItem(LibraryItem libraryItem)
+        private async Task BorrowLibraryItem(LibraryItem libraryItem)
         {
             libraryItem.IsBorrowable = false;
             libraryItem.Borrower = libraryItem.Borrower;
             libraryItem.BorrowDate = DateTime.Today;
 
-            await _libraryItemRepository.CheckOutLibraryItem(libraryItem);
+            await _libraryItemRepository.BorrowLibraryItem(libraryItem);
         }
 
-        private async Task CheckInLibraryItem(LibraryItem libraryItem)
+        private async Task ReturnLibraryItem(LibraryItem libraryItem)
         {
             libraryItem.IsBorrowable = true;
             libraryItem.Borrower = null;
             libraryItem.BorrowDate = null;
 
-            await _libraryItemRepository.CheckInLibraryItem(libraryItem);
+            await _libraryItemRepository.ReturnLibraryItem(libraryItem);
         }
 
         private List<LibraryItem> AddAcronymToTitle(List<LibraryItem> items)
@@ -97,7 +99,7 @@ namespace Library.Engine
 
             foreach (var item in items)
             {
-                item.Title = item.Title.Acronym();
+                item.Title = item.Title.ToAcronym();
                 libraryItemsWithAcronymTitle.Add(item);
             }
 

@@ -9,21 +9,21 @@
 <div>
     <table width="100%">
         <tr>
-            <td>
+            <th>
                 @Html.DisplayNameFor(m => m.LibraryItemBase.Title)
-            </td>
-            <td>
+            </th>
+            <th>
                 @Html.ActionLink("Sort on type", "Index", new { sortOption = "type" })
-            </td>
-            <td>
+            </th>
+            <th>
                 @Html.ActionLink("Sort on category", "Index", new { sortOption = "category" })
-            </td>
-            <td>
+            </th>
+            <th>
                 @Html.DisplayNameFor(m => m.LibraryItemBase.Borrower)
-            </td>
-            <td>
+            </th>
+            <th>
                 @Html.DisplayNameFor(m => m.LibraryItemBase.BorrowDate)
-            </td>
+            </th>
         </tr>
 
         @foreach (var item in Model.LibraryItems)

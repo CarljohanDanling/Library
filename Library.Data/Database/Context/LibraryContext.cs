@@ -4,6 +4,7 @@ using System;
 
 namespace Library.Data.Database.Context
 {
+    // This is where I set up the database with relations and also seed some dummy data.
     public class LibraryContext : DbContext
     {
         public LibraryContext(DbContextOptions<LibraryContext> options)
@@ -99,6 +100,66 @@ namespace Library.Data.Database.Context
                 {
                     Id = 3,
                     CategoryName = "Horror"
+                });
+
+            modelBuilder.Entity<Employee>().HasData(
+                new Employee()
+                {
+                    Id = 1,
+                    FirstName = "Test",
+                    LastName = "Manager",
+                    Salary = 13.8M,
+                    IsCEO = false,
+                    IsManager = true,
+                    ManagerId = null
+                });
+
+            modelBuilder.Entity<Employee>().HasData(
+                new Employee()
+                {
+                    Id = 2,
+                    FirstName = "Test",
+                    LastName = "Regular",
+                    Salary = 3.3750M,
+                    IsCEO = false,
+                    IsManager = false,
+                    ManagerId = 1
+                });
+
+            modelBuilder.Entity<Employee>().HasData(
+                new Employee()
+                {
+                    Id = 3,
+                    FirstName = "Test",
+                    LastName = "CEO",
+                    Salary = 16.3500M,
+                    IsCEO = true,
+                    IsManager = false,
+                    ManagerId = null
+                });
+
+            modelBuilder.Entity<Employee>().HasData(
+                new Employee()
+                {
+                    Id = 4,
+                    FirstName = "Test",
+                    LastName = "Manager2",
+                    Salary = 15.5250M,
+                    IsCEO = false,
+                    IsManager = true,
+                    ManagerId = 1
+                });
+
+            modelBuilder.Entity<Employee>().HasData(
+                new Employee()
+                {
+                    Id = 5,
+                    FirstName = "Test",
+                    LastName = "Regular",
+                    Salary = 4.5000M,
+                    IsCEO = false,
+                    IsManager = false,
+                    ManagerId = 4
                 });
         }
     }

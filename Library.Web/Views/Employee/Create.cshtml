@@ -6,7 +6,6 @@
         @*
             // I use a comparison in the "selected" to remain the choosen value after posting.
         *@
-        <option value="default" selected="@(Model.EmployeeType == EmployeeType.NonCategorized)">Choose what type of employee to create</option>
         <option value="regularEmployee" selected="@(Model.EmployeeType == EmployeeType.Employee)">Regular employee</option>
         <option value="manager" selected="@(Model.EmployeeType == EmployeeType.Manager)">Manager</option>
         <option value="ceo" selected="@(Model.EmployeeType == EmployeeType.CEO)">CEO</option>
@@ -23,7 +22,7 @@
 @*
     // I partly stole this JS code from a page.
     // I analyzed it, understood it and customized it to fit my solution.
-    // If show/hide the different fields depending on what selection is active.
+    // It show/hide the different fields depending on what selection is active.
 *@
 
 @section Scripts

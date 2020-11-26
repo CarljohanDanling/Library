@@ -1,13 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 
 namespace Library.Engine.ExtensionMethods
 {
+    // I made this extension method to solve the Acrynom problem.
+    // Shortly explained: I split the title to an string array.
+    // Then loop over it and build up a new string. I substring to
+    // get only the first letter in the string.
     public static class MyExtensions
     {
-        public static string Acronym(this String title)
+        public static string ToAcronym(this String title)
         {
             var strSplit = title.Split(' ');
             var acronym = "";
@@ -19,7 +21,10 @@ namespace Library.Engine.ExtensionMethods
                     acronym += s;
                 }
 
-                acronym += s.Substring(0, 1).ToUpper();
+                else
+                {
+                    acronym += s.Substring(0, 1).ToUpper();
+                }
             }
 
             return title + " " + "(" + acronym + ")";

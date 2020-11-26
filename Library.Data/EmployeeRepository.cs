@@ -9,6 +9,8 @@ using System;
 
 namespace Library.Data
 {
+    // This repository handles actions related to employees
+
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly LibraryContext _libraryContext;
@@ -28,6 +30,15 @@ namespace Library.Data
             return await _libraryContext.Employees.ToListAsync();
         }
 
+        public async Task<int> GetManagerId()
+        {
+            return await _libraryContext.Employees
+                .Where(emp => emp.IsManager)
+                .Select(emp => emp.Id)
+                .FirstAsync();
+        }
+
+        // This is used to get all managers and, if present, CEO.
         public async Task<List<Employee>> GetNonRegularEmployees()
         {
             return await _libraryContext.Employees
@@ -37,6 +48,24 @@ namespace Library.Data
         public async Task CreateEmployee(Employee employee)
         {
             await _libraryContext.AddAsync(employee);
+            await _libraryContext.SaveChangesAsync();
+        }
+
+        // This method helps me to clear the ManagerId when an Manager advances
+        // to CEO. Because the manager manages regular employees and being an
+        // CEO you can't manage regular employees.
+        public async Task RemoveManagerIdFromEmployees(int id)
+        {
+            await _libraryContext.Employees
+                .Where(emp => emp.ManagerId == id)
+                .ForEachAsync(emp => emp.ManagerId = null);
+
+            await _libraryContext.SaveChangesAsync();
+        }
+
+        public async Task EditEmployee(Employee employee)
+        {
+            _libraryContext.Update(employee);
             await _libraryContext.SaveChangesAsync();
         }
 

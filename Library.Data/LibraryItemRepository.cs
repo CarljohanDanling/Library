@@ -74,13 +74,13 @@ namespace Library.Data
             return true;
         }
 
-        public async Task CheckOutLibraryItem(LibraryItem libraryItem)
+        public async Task BorrowLibraryItem(LibraryItem libraryItem)
         {
             _libraryContext.LibraryItems.Update(libraryItem);
             await _libraryContext.SaveChangesAsync();
         }
 
-        public async Task CheckInLibraryItem(LibraryItem libraryItem)
+        public async Task ReturnLibraryItem(LibraryItem libraryItem)
         {
             _libraryContext.LibraryItems.Update(libraryItem);
             await _libraryContext.SaveChangesAsync();

@@ -5,11 +5,15 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Library.Data.Database.Models;
 using Library.Engine.Interface;
+using System;
 
 namespace Library.Web.Controllers
 {
     public class CategoryController : Controller
     {
+        // I choose to have duplicate names of the different methods.
+        // I differentiate between them by adding [HttpGet] and [HttpPost].
+
         private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
 
@@ -70,8 +74,11 @@ namespace Library.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                isDuplicateNameError = await _categoryService.EditCategory(editCategory);
-                if (isDuplicateNameError)
+                try
+                {
+                    isDuplicateNameError = await _categoryService.EditCategory(editCategory);
+                }
+                catch (Exception)
                 {
                     ModelState.AddModelError("DuplicateNameError", "A category with that name already exist.");
                     return View(category);
@@ -88,7 +95,7 @@ namespace Library.Web.Controllers
         {
             var category = await _categoryService.GetCategory(id);
             var categoryMapped = _mapper.Map<CategoryModel>(category);
-                
+
             return View(categoryMapped);
         }
 

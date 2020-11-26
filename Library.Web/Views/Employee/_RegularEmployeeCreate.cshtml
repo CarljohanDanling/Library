@@ -5,7 +5,7 @@
     @using (Html.BeginForm("Create", "Employee"))
     {
     <div>
-        <div asp-validation-summary="All" class="text-danger"></div>
+        <div asp-validation-summary="None" class="text-danger"></div>
         <ol>
             <li>
                 @Html.LabelFor(m => m.Employee.FirstName)
@@ -39,7 +39,7 @@
         <input type="hidden" name="Id" value="0" />
         <input type="hidden" name="employeeType" value="@EmployeeType.Employee" />
 
-        <input type="submit" value="Create" />
+        <input type="submit" class="btn btn-success" value="Create" />
     </div>
     }
 </div>

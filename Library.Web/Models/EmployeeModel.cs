@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Library.Engine.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Library.Web.Models
 {
@@ -12,7 +13,7 @@ namespace Library.Web.Models
 
         [Required]
         public string LastName { get; set; }
-        
+
         [Required]
         public bool IsManager { get; set; }
 
@@ -20,17 +21,17 @@ namespace Library.Web.Models
         public bool IsCEO { get; set; }
 
         [Required]
+        [Range(1, 10)]
         public int Rank { get; set; }
-
-        [Display(Name = "Employee type")]
-        public string EmployeeType { get; set; }
 
         [Display(Name = "Managed by")]
         public string ManagedBy { get; set; }
 
+        [Display(Name = "Employee type")]
+        public EmployeeType EmployeeType { get; set; }
+
         public decimal Salary { get; set; }
         public int? ManagerId { get; set; }
-        public decimal SalaryCoefficient { get; set; }
         public string Name { get; set; }
     }
 }

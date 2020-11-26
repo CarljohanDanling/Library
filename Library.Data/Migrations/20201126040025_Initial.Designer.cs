@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library.Data.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20201122215030_Initial")]
+    [Migration("20201126040025_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,6 +87,56 @@ namespace Library.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstName = "Test",
+                            IsCEO = false,
+                            IsManager = true,
+                            LastName = "Manager",
+                            Salary = 13.8m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FirstName = "Test",
+                            IsCEO = false,
+                            IsManager = false,
+                            LastName = "Regular",
+                            ManagerId = 1,
+                            Salary = 3.3750m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FirstName = "Test",
+                            IsCEO = true,
+                            IsManager = false,
+                            LastName = "CEO",
+                            Salary = 16.3500m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FirstName = "Test",
+                            IsCEO = false,
+                            IsManager = true,
+                            LastName = "Manager2",
+                            ManagerId = 1,
+                            Salary = 15.5250m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            FirstName = "Test",
+                            IsCEO = false,
+                            IsManager = false,
+                            LastName = "Regular",
+                            ManagerId = 4,
+                            Salary = 4.5000m
+                        });
                 });
 
             modelBuilder.Entity("Library.Data.Database.Models.LibraryItem", b =>

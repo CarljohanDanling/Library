@@ -10,6 +10,8 @@ using Library.Data.Interfaces;
 
 namespace Library.Data
 {
+    // This repository handles actions related to category.
+
     public class CategoryRepository : ICategoryRepository
     {
         private readonly LibraryContext _libraryContext;

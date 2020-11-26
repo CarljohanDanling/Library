@@ -68,17 +68,24 @@ namespace Library.Data.Migrations
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "CategoryName" },
-                values: new object[] { 1, "Adventure" });
+                values: new object[,]
+                {
+                    { 1, "Adventure" },
+                    { 2, "Comedy" },
+                    { 3, "Horror" }
+                });
 
             migrationBuilder.InsertData(
-                table: "Categories",
-                columns: new[] { "Id", "CategoryName" },
-                values: new object[] { 2, "Comedy" });
-
-            migrationBuilder.InsertData(
-                table: "Categories",
-                columns: new[] { "Id", "CategoryName" },
-                values: new object[] { 3, "Horror" });
+                table: "Employees",
+                columns: new[] { "Id", "FirstName", "IsCEO", "IsManager", "LastName", "ManagerId", "Salary" },
+                values: new object[,]
+                {
+                    { 1, "Test", false, true, "Manager", null, 13.8m },
+                    { 2, "Test", false, false, "Regular", 1, 3.3750m },
+                    { 3, "Test", true, false, "CEO", null, 16.3500m },
+                    { 4, "Test", false, true, "Manager2", 1, 15.5250m },
+                    { 5, "Test", false, false, "Regular", 4, 4.5000m }
+                });
 
             migrationBuilder.InsertData(
                 table: "LibraryItems",

@@ -1,24 +1,29 @@
 ﻿@model CategoryModel
 
 <div class="form-group">
+    @using (Html.BeginForm("Delete", "Category"))
+    {
+        <div>
+            <table>
+                <tr>
+                    <td>
+                        You want to delete: @Model.CategoryName?
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="text-danger">@Html.ValidationMessage("CategoryReferenceError")</span>
+                    </td>
+                </tr>
+            </table>
 
-    <form method="post" asp-action="Delete">
-        <div asp-validation-summary="All" class="text-danger"></div>
-
-        You want to delete: @Model.CategoryName?
-
-        <span asp-validation-for="CategoryName" class="text-danger"></span>
-        <span class="text-danger">@Html.ValidationMessage("CategoryReferenceError")</span>
-        @Html.HiddenFor(c => c.Id)
-        @Html.HiddenFor(c => c.CategoryName)
-
-    <div>
-        <input type="submit" class="btn btn-danger" value="Delete" />
-        <input type="button"
-               class="btn btn-primary"
-               value="Back to categories"
-               onclick="location.href='@Url.Action("Index", "Category")'" />
-    </div>
-
-    </form>
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.CategoryName)
+        </div>
+        <br />
+        <div>
+            <input type="submit" class="btn btn-danger" value="Delete" />
+            <a asp-action="Index" asp-controller="Category" class="btn btn-primary">Back to categories</a>
+        </div>
+    }
 </div>

@@ -38,29 +38,33 @@
                 </li>
                 <li>
                     @Html.LabelFor(m => m.NonDigitalMediaItem.BorrowDate)
-                    @Model.NonDigitalMediaItem.BorrowDate
+                    @Html.TextBoxFor(m => m.NonDigitalMediaItem.BorrowDate, new { @disabled = "disabled" })
+                </li>
+            }
+
+            @if (Model.NonDigitalMediaItem.IsBorrowable)
+            {
+                <li>
+                    @Html.LabelFor(m => m.NonDigitalMediaItem.Borrower)
+                    @Html.EditorFor(m => m.NonDigitalMediaItem.Borrower)
+                    <input type="submit" class="btn btn-primary" name="typeOfAction" value="Borrow" />
+                    <span class="text-danger">@Html.ValidationMessage("BorrowerError")</span>
+                </li>
+            }
+
+            else if (Model.NonDigitalMediaItem.ItemType != LibraryItemType.ReferenceBook)
+            {
+                <li style="list-style-type:none">
+                    <div style="display:inline-flex">
+                        <p style="margin-right:5px">To return this item, please click here:</p>
+                        <div>
+                            <input type="submit" class="btn btn-primary" name="typeOfAction" value="Return" />
+                        </div>
+                    </div>
                 </li>
             }
         </ol>
 
-        @if (Model.NonDigitalMediaItem.IsBorrowable)
-        {
-            <div>
-                <p>To borrow this item, please enter borrower and click "Check Out"</p>
-                @Html.LabelFor(m => m.NonDigitalMediaItem.Borrower)
-                @Html.EditorFor(m => m.NonDigitalMediaItem.Borrower)
-                <input type="submit" name="submit" value="Check Out" />
-                <span class="text-danger">@Html.ValidationMessage("BorrowerError")</span>
-            </div>
-        }
-
-        else if (Model.NonDigitalMediaItem.ItemType != LibraryItemType.ReferenceBook)
-        {
-            <div>
-                <p>Return this item by clicking button:</p>
-                <input type="submit" name="submit" value="Check In" />
-            </div>
-        }
 
         @for (int i = 0; i < Model.Categories.Count; i++)
         {
@@ -74,6 +78,10 @@
         @Html.HiddenFor(m => m.NonDigitalMediaItem.Borrower)
 
         <input type="hidden" name="mediaItemCategory" value="@MediaItemCategory.NonDigitalMedia" />
-        <input type="submit" name="submit" value="Edit" />
+        <ol>
+            <li style="list-style-type:none">
+                <input type="submit" class="btn btn-success" name="typeOfAction" value="Edit" />
+            </li>
+        </ol>
     </div>
 }

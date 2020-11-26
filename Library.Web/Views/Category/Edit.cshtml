@@ -1,9 +1,8 @@
 ﻿@model CategoryModel
 
-<div class="form-group">
-
-    <form method="post" asp-action="Edit">
-        <div asp-validation-summary="All" class="text-danger"></div>
+@using (Html.BeginForm("Edit", "Category"))
+{
+    <div>
         <label asp-for="CategoryName"></label>
         <input asp-for="CategoryName" />
         <span asp-validation-for="CategoryName" class="text-danger"></span>
@@ -11,6 +10,6 @@
         @Html.HiddenFor(c => c.Id)
 
         <br />
-        <input type="submit" value="Edit" />
-    </form>
-</div>
+        <input type="submit" class="btn btn-primary" value="Edit" />
+    </div>
+}

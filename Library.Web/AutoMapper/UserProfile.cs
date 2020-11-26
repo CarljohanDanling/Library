@@ -3,17 +3,22 @@ using Library.Data.Database.Models;
 using Library.Engine.Dtos;
 using Library.Engine.Enums;
 using Library.Web.Models;
-using System;
 
 namespace Library.Web.AutoMapper
 {
     public class UserProfile : Profile
     {
+        // This is where I make mappings of different classes.
+        // I also have some logic built into the mapping, like the
+        // one where I map the bool representation of IsCEO and IsManager from
+        // the database into my EmployeeType enum. Very handy!
         public UserProfile()
         {
+            // Category
             CreateMap<CategoryModel, Category>();
             CreateMap<Category, CategoryModel>();
 
+            // Library
             CreateMap<LibraryItem, LibraryItemBase>()
                 .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.Type));
 
@@ -26,11 +31,12 @@ namespace Library.Web.AutoMapper
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.NonDigitalMediaItemType));
 
             CreateMap<LibraryItem, NonDigitalMediaItem>()
-                .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.Type));
+                .ForMember(dest => dest.NonDigitalMediaItemType, opt => opt.MapFrom(src => src.Type));
 
             CreateMap<LibraryItem, DigitalMediaItem>()
-                .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.Type));
+                .ForMember(dest => dest.DigitalMediaItemType, opt => opt.MapFrom(src => src.Type));
 
+            // Employee
             CreateMap<Employee, EmployeeDto>()
                 .ForMember(dest => dest.EmployeeType, opt => opt.MapFrom((src, dest) =>
                 {
@@ -41,6 +47,8 @@ namespace Library.Web.AutoMapper
                     if (isManager) return EmployeeType.Manager;
                     return EmployeeType.CEO;
                 }));
+
+            CreateMap<EmployeeDto, Employee>();
 
             CreateMap<EmployeeDto, EmployeeModel>()
                 .ForMember(dest => dest.Name, opt => opt

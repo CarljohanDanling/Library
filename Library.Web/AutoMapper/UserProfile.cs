@@ -19,22 +19,25 @@ namespace Library.Web.AutoMapper
             CreateMap<Category, CategoryModel>();
 
             // Library
-            CreateMap<LibraryItem, LibraryItemBase>()
-                .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.Type));
-
             CreateMap<LibraryItemBase, LibraryItem>();
+            CreateMap<LibraryItemBase, NonDigitalMediaItem>()
+                .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.ItemType))
+                .ForMember(dest => dest.NonDigitalMediaItemType, opt => opt.MapFrom(src => src.ItemType));
+            CreateMap<LibraryItemBase, DigitalMediaItem>()
+                .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.ItemType))
+                .ForMember(dest => dest.DigitalMediaItemType, opt => opt.MapFrom(src => src.ItemType));
 
             CreateMap<DigitalMediaItem, LibraryItem>()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.DigitalMediaItemType));
-
             CreateMap<NonDigitalMediaItem, LibraryItem>()
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.NonDigitalMediaItemType));
 
             CreateMap<LibraryItem, NonDigitalMediaItem>()
                 .ForMember(dest => dest.NonDigitalMediaItemType, opt => opt.MapFrom(src => src.Type));
-
             CreateMap<LibraryItem, DigitalMediaItem>()
                 .ForMember(dest => dest.DigitalMediaItemType, opt => opt.MapFrom(src => src.Type));
+            CreateMap<LibraryItem, LibraryItemBase>()
+                .ForMember(dest => dest.ItemType, opt => opt.MapFrom(src => src.Type));
 
             // Employee
             CreateMap<Employee, EmployeeDto>()

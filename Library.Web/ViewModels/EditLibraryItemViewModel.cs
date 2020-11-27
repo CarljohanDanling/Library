@@ -11,7 +11,6 @@ namespace Library.Web.ViewModels
 
         [Display(Name = "Type")]
         public LibraryItemType LibraryItemType { get; set; }
-        public MediaItemCategory MediaItemCategory{ get; set; }
         public List<CategoryModel> Categories { get; set; }
     }
 }

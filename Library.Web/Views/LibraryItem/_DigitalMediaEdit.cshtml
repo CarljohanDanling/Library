@@ -2,79 +2,80 @@
 
 @using (Html.BeginForm("Edit", "LibraryItem"))
 {
-    <div>
-        <div asp-validation-summary="All" class="text-danger"></div>
-        <ol>
-            <li>
-                @Html.LabelFor(m => m.DigitalMediaItem.Title)
-                @Html.TextBoxFor(m => m.DigitalMediaItem.Title)
-                <span asp-validation-for="DigitalMediaItem.Title" class="text-danger"></span>
-            </li>
-            <li>
-                @Html.LabelFor(m => m.LibraryItemType)
-                <select asp-for="DigitalMediaItem.DigitalMediaItemType" asp-items="@Html.GetEnumSelectList<DigitalMediaItemType>()"></select>
-            </li>
-            <li>
-                @Html.LabelFor(m => m.Categories.FirstOrDefault().CategoryName)
-                @Html.DropDownListFor(m => m.DigitalMediaItem.CategoryId, new SelectList(Model.Categories, "Id", "CategoryName"))
-            </li>
-            <li>
-                @Html.LabelFor(m => m.DigitalMediaItem.RunTimeMinutes)
-                @Html.EditorFor(m => m.DigitalMediaItem.RunTimeMinutes)
-                <span asp-validation-for="DigitalMediaItem.RunTimeMinutes" class="text-danger"></span>
-            </li>
+<div>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <ol>
+        <li>
+            @Html.LabelFor(m => m.DigitalMediaItem.Title)
+            @Html.TextBoxFor(m => m.DigitalMediaItem.Title)
+            <span asp-validation-for="DigitalMediaItem.Title" class="text-danger"></span>
+        </li>
+        <li>
+            @Html.LabelFor(m => m.LibraryItemType)
+            <select asp-for="DigitalMediaItem.DigitalMediaItemType" asp-items="@Html.GetEnumSelectList<DigitalMediaItemType>()"></select>
+        </li>
+        <li>
+            @Html.LabelFor(m => m.Categories.FirstOrDefault().CategoryName)
+            @Html.DropDownListFor(m => m.DigitalMediaItem.CategoryId, new SelectList(Model.Categories, "Id", "CategoryName"))
+        </li>
+        <li>
+            @Html.LabelFor(m => m.DigitalMediaItem.RunTimeMinutes)
+            @Html.EditorFor(m => m.DigitalMediaItem.RunTimeMinutes)
+            <span asp-validation-for="DigitalMediaItem.RunTimeMinutes" class="text-danger"></span>
+        </li>
 
-            @if (Model.DigitalMediaItem.Borrower != null)
-            {
-                <li>
-                    @Html.LabelFor(m => m.DigitalMediaItem.Borrower)
-                    @Html.TextBoxFor(m => m.DigitalMediaItem.Borrower)
-                </li>
-                <li>
-                    @Html.LabelFor(m => m.DigitalMediaItem.BorrowDate)
-                    @Html.TextBoxFor(m => m.DigitalMediaItem.BorrowDate, new { @disabled = "disabled" })
-                </li>
-            }
-
-            @if (Model.DigitalMediaItem.IsBorrowable)
-            {
-                <li>
-                    @Html.LabelFor(m => m.DigitalMediaItem.Borrower)
-                    @Html.EditorFor(m => m.DigitalMediaItem.Borrower)
-                    <input type="submit" class="btn btn-success" name="typeOfAction" value="Borrow" />
-                    <span class="text-danger">@Html.ValidationMessage("BorrowerError")</span>
-                </li>
-            }
-
-            else
-            {
-                <li style="list-style-type:none">
-                    <div style="display:inline-flex">
-                        <p style="margin-right:5px">To return this item, please click here:</p>
-                        <div>
-                            <input type="submit" class="btn btn-success" name="typeOfAction" value="Return" />
-                        </div>
-                    </div>
-                </li>
-            }
-        </ol>
-
-        @for (int i = 0; i < Model.Categories.Count; i++)
+        @if (Model.DigitalMediaItem.Borrower != null)
         {
-            @Html.HiddenFor(model => Model.Categories[i].CategoryName)
-            @Html.HiddenFor(model => Model.Categories[i].Id)
+            <li>
+                @Html.LabelFor(m => m.DigitalMediaItem.Borrower)
+                @Html.TextBoxFor(m => m.DigitalMediaItem.Borrower)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.DigitalMediaItem.BorrowDate)
+                @Html.TextBoxFor(m => m.DigitalMediaItem.BorrowDate, new { @disabled = "disabled" })
+            </li>
         }
 
-        @Html.HiddenFor(m => m.DigitalMediaItem.Id)
-        @Html.HiddenFor(m => m.DigitalMediaItem.IsBorrowable)
-        @Html.HiddenFor(m => m.DigitalMediaItem.BorrowDate)
-        @Html.HiddenFor(m => m.DigitalMediaItem.Borrower)
-
-        <input type="hidden" name="mediaItemCategory" value="@MediaItemCategory.DigitalMedia" />
-        <ol>
-            <li style="list-style-type:none">
-                <input type="submit" class="btn btn-primary" name="typeOfAction" value="Edit" />
+        @if (Model.DigitalMediaItem.IsBorrowable)
+        {
+            <li>
+                @Html.LabelFor(m => m.DigitalMediaItem.Borrower)
+                @Html.EditorFor(m => m.DigitalMediaItem.Borrower)
+                <input type="submit" class="btn btn-success" name="typeOfAction" value="Borrow" />
+                <span class="text-danger">@Html.ValidationMessage("BorrowerError")</span>
             </li>
-        </ol>
-    </div>
+        }
+
+        else
+        {
+            <li style="list-style-type:none">
+                <div style="display:inline-flex">
+                    <p style="margin-right:5px">To return this item, please click here:</p>
+                    <div>
+                        <input type="submit" class="btn btn-success" name="typeOfAction" value="Return" />
+                    </div>
+                </div>
+            </li>
+        }
+    </ol>
+
+    @for (int i = 0; i < Model.Categories.Count; i++)
+    {
+        @Html.HiddenFor(model => Model.Categories[i].CategoryName)
+        @Html.HiddenFor(model => Model.Categories[i].Id)
+    }
+
+    @Html.HiddenFor(m => m.DigitalMediaItem.Id)
+    @Html.HiddenFor(m => m.DigitalMediaItem.IsBorrowable)
+    @Html.HiddenFor(m => m.DigitalMediaItem.BorrowDate)
+    @Html.HiddenFor(m => m.DigitalMediaItem.Borrower)
+
+    <input type="hidden" name="currentType" value="@Model.DigitalMediaItem.ItemType" />
+    <input type="hidden" name="mediaItemCategory" value="@MediaItemCategory.DigitalMedia" />
+    <ol>
+        <li style="list-style-type:none">
+            <input type="submit" class="btn btn-primary" name="typeOfAction" value="Edit" />
+        </li>
+    </ol>
+</div>
 }

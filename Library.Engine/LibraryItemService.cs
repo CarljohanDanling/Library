@@ -42,12 +42,12 @@ namespace Library.Engine
             return await _libraryItemRepository.CreateLibraryItem(libraryItem);
         }
 
-        public async Task EditLibraryItem(LibraryItem libraryItem, string submit)
+        public async Task LibraryItemOperations(LibraryItem libraryItem, string typeOfAction)
         {
-            switch (submit)
+            switch (typeOfAction)
             {
                 case "Edit":
-                    await _libraryItemRepository.EditLibraryItem(libraryItem);
+                    await EditLibraryItem(libraryItem);
                     break;
                 case "Borrow":
                     await BorrowLibraryItem(libraryItem);
@@ -72,6 +72,27 @@ namespace Library.Engine
             catch (InvalidOperationException)
             {
                 throw;
+            }
+        }
+
+        private async Task EditLibraryItem(LibraryItem libraryItem)
+        {
+            if (libraryItem.Type == "ReferenceBook")
+            {
+                libraryItem.BorrowDate = null;
+                libraryItem.Borrower = null;
+                libraryItem.IsBorrowable = false;
+            }
+
+            else if (libraryItem.IsBorrowable == false)
+            {
+                await _libraryItemRepository.EditLibraryItem(libraryItem);
+            }
+
+            else
+            {
+                libraryItem.IsBorrowable = true;
+                await _libraryItemRepository.EditLibraryItem(libraryItem);
             }
         }
 

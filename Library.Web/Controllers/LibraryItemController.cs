@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Library.Engine.Interface;
+using System;
 
 namespace Library.Web.Controllers
 {
@@ -91,7 +92,7 @@ namespace Library.Web.Controllers
         }
 
         // This method gets the item and all categories from database.
-        //It constructs up a viewmodel which the view uses.
+        // It constructs up a viewmodel which the view uses.
         public async Task<IActionResult> Edit(int id)
         {
             var categories = await _categoryService.GetCategories();
@@ -116,26 +117,50 @@ namespace Library.Web.Controllers
             return View(viewModel);
         }
 
-        // This model calls MediaCoordinators, one for each MediaItemCategory. The coordinator later calls handlers
-        // depending on what kind of action the users is taking; editing, borrowing, returning. Depending on if the 
-        // call was successfull or not, a boolean bubbles up to this method and taking the correct actions.
+        // This method calls MediaCoordinator (service layer). If an invalid operation takes place in the service layer, it bubbles up
+        // to this method and apply model state error.
         [HttpPost]
         public async Task<IActionResult> Edit(EditLibraryItemViewModel viewModel, MediaItemCategory mediaItemCategory,
-            string typeOfAction, LibraryItemType currentType)
+            string typeOfAction, LibraryItemType type)
         {
+            var fromType = type.ToString();
+
             if (ModelState.IsValid)
             {
-                switch (mediaItemCategory)
+                if (mediaItemCategory == MediaItemCategory.DigitalMedia)
                 {
-                    case MediaItemCategory.DigitalMedia:
-                        var digitalSuccess = await DigitalMediaCoordinator(viewModel, typeOfAction, currentType);
-                        if (digitalSuccess) return RedirectToAction("Index", "LibraryItem");
-                        return View(viewModel);
+                    var digitalItem = _mapper.Map<LibraryItem>(viewModel.DigitalMediaItem);
 
-                    case MediaItemCategory.NonDigitalMedia:
-                        var nonDigitalSuccess = await NonDigitalMediaCoordinator(viewModel, typeOfAction, currentType);
-                        if (nonDigitalSuccess) return RedirectToAction("Index", "LibraryItem");
+                    try
+                    {
+                        await _libraryItemService.MediaCoordinator(typeOfAction, digitalItem, fromType);
+                    }
+
+                    catch (InvalidOperationException ex)
+                    {
+                        GenerateModelError(ex);
                         return View(viewModel);
+                    }
+
+                    return RedirectToAction("Index", "LibraryItem");
+                }
+
+                else
+                {
+                    var nonDigitalItem = _mapper.Map<LibraryItem>(viewModel.NonDigitalMediaItem);
+
+                    try
+                    {
+                        var nonDigitalSuccess = await _libraryItemService.MediaCoordinator(typeOfAction, nonDigitalItem, fromType);
+                    }
+
+                    catch (InvalidOperationException ex)
+                    {
+                        GenerateModelError(ex);
+                        return View(viewModel);
+                    }
+
+                    return RedirectToAction("Index", "LibraryItem");
                 }
             }
 
@@ -167,124 +192,23 @@ namespace Library.Web.Controllers
             }
         }
 
-        // This method checks what action the user is taking, then guiding the code to the right action ("Edit", "Borrow" and "Return").
-        private async Task<bool> NonDigitalMediaCoordinator(EditLibraryItemViewModel viewModel, string typeOfAction, LibraryItemType currentType)
+        private void GenerateModelError(InvalidOperationException ex)
         {
-            if (typeOfAction == "Edit")
+            if (ex.Message == "NonBorrowableError")
             {
-                var success = await EditHandler(viewModel.NonDigitalMediaItem, typeOfAction, currentType);
-                if (success) return true;
-                return false;
-            }
-
-            else if (typeOfAction == "Borrow")
-            {
-                if (viewModel.NonDigitalMediaItem.Borrower == null)
-                {
-                    ModelState.AddModelError("BorrowerError", "Must enter borrower");
-                    return false;
-                }
-
-                await BorrowHandler(viewModel.NonDigitalMediaItem, typeOfAction);
-                return true;
-            }
-
-            await ReturnHandler(viewModel.NonDigitalMediaItem, typeOfAction);
-            return true;
-        }
-
-        // This method checks what action the user is taking, then guiding the code to the right action ("Edit", "Borrow" and "Return").
-        private async Task<bool> DigitalMediaCoordinator(EditLibraryItemViewModel viewModel, string typeOfAction, LibraryItemType currentType)
-        {
-            if (typeOfAction == "Edit")
-            {
-                var success = await EditHandler(viewModel.DigitalMediaItem, typeOfAction, currentType);
-                if (success) return true;
-                return false;
-            }
-
-            else if (typeOfAction == "Borrow")
-            {
-                if (viewModel.DigitalMediaItem.Borrower == null)
-                {
-                    ModelState.AddModelError("BorrowerError", "Must enter borrower");
-                    return false;
-                }
-
-                await BorrowHandler(viewModel.DigitalMediaItem, typeOfAction);
-                return true;
-            }
-
-            await ReturnHandler(viewModel.DigitalMediaItem, typeOfAction);
-            return true;
-        }
-
-        // The user shouldnt be able to edit the type of the library item if it is borrowed. This method handles that.
-        // If it is a ReferenceBook, the user can change the type, because a ReferenceBook is not borrowable.
-        private async Task<bool> EditHandler(NonDigitalMediaItem item, string typeOfAction, LibraryItemType type)
-        {
-            var nonDigitalItem = _mapper.Map<LibraryItem>(item);
-            var fromType = type.ToString();
-            var toType = item.NonDigitalMediaItemType.ToString();
-
-            if (fromType != toType)
-            {   
-                if (fromType == "ReferenceBook")
-                {
-                    await _libraryItemService.LibraryItemOperations(nonDigitalItem, typeOfAction);
-                    return true;
-                }
-
-                else if (item.IsBorrowable)
-                {
-                    await _libraryItemService.LibraryItemOperations(nonDigitalItem, typeOfAction);
-                    return true;
-                }
-
                 ModelState.AddModelError("NonBorrowableError", "The item is borrowed, return it before editing it.");
-                return false;
+                return;
             }
 
-            await _libraryItemService.LibraryItemOperations(nonDigitalItem, typeOfAction);
-            return true;
-        }
-
-        // The user shouldnt be able to edit the type of the library item if it is borrowed. This method checks that by
-        // comparing fromType and toType.
-        private async Task<bool> EditHandler(DigitalMediaItem item, string typeOfAction, LibraryItemType type)
-        {
-            var digitalItem = _mapper.Map<LibraryItem>(item);
-            var fromType = type.ToString();
-            var toType = item.DigitalMediaItemType.ToString();
-
-            if (fromType != toType)
+            if (ex.Message == "BorrowerNameIsNullError")
             {
-                if (item.IsBorrowable == false)
-                {
-                    ModelState.AddModelError("NonBorrowableError", "The item is borrowed, return it before editing it.");
-                    return false;
-                }
+                ModelState.AddModelError("BorrowerError", "Must enter borrower");
+                return;
             }
-
-            await _libraryItemService.LibraryItemOperations(digitalItem, typeOfAction);
-            return true;
-        }
-
-        private async Task BorrowHandler<T>(T item, string typeOfAction)
-        {
-            var itemMapped = _mapper.Map<LibraryItem>(item);
-            await _libraryItemService.LibraryItemOperations(itemMapped, typeOfAction);
-        }
-
-        private async Task ReturnHandler<T>(T item, string typeOfAction)
-        {
-            var itemMapped = _mapper.Map<LibraryItem>(item);
-            await _libraryItemService.LibraryItemOperations(itemMapped, typeOfAction);
         }
 
         // This method solves the criteria: "Listing library items should be sorted by Category Name. This can be changed to
         // Type by the user. (This change need to persist in current session but not after application restart).
-
         // I struggled a bit with this I remember. I'm not very used to Sessions and before I figured out
         // how it worked I had a hard time figuring out how to save the user option through out the applications
         // life cycle. The solution is not elegant but not ugly either >__< .

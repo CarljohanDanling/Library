@@ -22,7 +22,7 @@ namespace Library.Engine
             var items = await _libraryItemRepository.GetLibraryItems();
             var itemsWithAcronymTitle = AddAcronymToTitle(items);
 
-            return items;
+            return itemsWithAcronymTitle;
         }
 
         public async Task<LibraryItem> GetLibraryItem(int id)
@@ -42,22 +42,65 @@ namespace Library.Engine
             return await _libraryItemRepository.CreateLibraryItem(libraryItem);
         }
 
-        public async Task LibraryItemOperations(LibraryItem libraryItem, string typeOfAction)
+        // This methods differenties between what kind of library item it is. It also performs some logic from rules that I decided.
+        // There is ONE holy rule that applies to all library items; IF an item is borrowed, you cannot edit anything before RETURNING it.
+        // The ReferenceBook is a bit special, hence the more logic in the Else {} code block.
+        private async Task<bool> EditHandler(LibraryItem libraryItem, string fromType)
         {
-            switch (typeOfAction)
+            if (libraryItem.Type == "AudioBook" || libraryItem.Type == "Dvd")
             {
-                case "Edit":
+                if (libraryItem.IsBorrowable)
+                {
                     await EditLibraryItem(libraryItem);
-                    break;
-                case "Borrow":
-                    await BorrowLibraryItem(libraryItem);
-                    break;
-                case "Return":
-                    await ReturnLibraryItem(libraryItem);
-                    break;
-                default:
-                    throw new Exception("No submit action chosen");
+                    return true;
+                }
+
+                throw new InvalidOperationException();
             }
+
+            else
+            {
+                if (fromType == "Book" && libraryItem.IsBorrowable)
+                {
+                    libraryItem.IsBorrowable = false;
+                    await EditLibraryItem(libraryItem);
+                    return true;
+                }
+
+                else if (fromType == "ReferenceBook")
+                {
+                    libraryItem.IsBorrowable = true;
+                    await EditLibraryItem(libraryItem);
+                    return true;
+                }
+
+                throw new InvalidOperationException();
+            }
+        }
+
+        // This method checks what action the user is taking, then guiding the code to the right action ("Edit", "Borrow" and "Return").
+        public async Task<bool> MediaCoordinator(string typeOfAction, LibraryItem libraryItem, string fromType)
+        {
+            if (typeOfAction == "Edit")
+            {
+                try {await EditHandler(libraryItem, fromType);}
+
+                catch (Exception) {throw new InvalidOperationException("NonBorrowableError");}
+
+                return true;
+            }
+
+            else if (typeOfAction == "Borrow")
+            {
+                if (libraryItem.Borrower == null)
+                    throw new InvalidOperationException("BorrowerNameIsNullError");
+
+                await BorrowLibraryItem(libraryItem);
+                return true;
+            }
+
+            await ReturnLibraryItem(libraryItem);
+            return true;
         }
 
         public async Task<bool> DeleteLibraryItem(int id)
@@ -82,18 +125,16 @@ namespace Library.Engine
                 libraryItem.BorrowDate = null;
                 libraryItem.Borrower = null;
                 libraryItem.IsBorrowable = false;
+
+                await _libraryItemRepository.EditLibraryItem(libraryItem);
             }
 
             else if (libraryItem.IsBorrowable == false)
-            {
                 await _libraryItemRepository.EditLibraryItem(libraryItem);
-            }
 
             else
-            {
                 libraryItem.IsBorrowable = true;
                 await _libraryItemRepository.EditLibraryItem(libraryItem);
-            }
         }
 
         private async Task BorrowLibraryItem(LibraryItem libraryItem)

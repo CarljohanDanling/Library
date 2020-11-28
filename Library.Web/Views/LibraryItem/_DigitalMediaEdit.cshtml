@@ -70,7 +70,8 @@
     @Html.HiddenFor(m => m.DigitalMediaItem.BorrowDate)
     @Html.HiddenFor(m => m.DigitalMediaItem.Borrower)
 
-    <input type="hidden" name="currentType" value="@Model.DigitalMediaItem.ItemType" />
+    
+    <input type="hidden" name="type" value="@Model.DigitalMediaItem.ItemType" />
     <input type="hidden" name="mediaItemCategory" value="@MediaItemCategory.DigitalMedia" />
     <ol>
         <li style="list-style-type:none">

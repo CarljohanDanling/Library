@@ -9,7 +9,7 @@ namespace Library.Engine.Interface
         Task<IEnumerable<LibraryItem>> GetLibraryItems();
         Task<LibraryItem> GetLibraryItem(int id);
         Task<bool> CreateLibraryItem(LibraryItem libraryItem);
-        Task LibraryItemOperations(LibraryItem libraryItem, string typeOfAction);
+        Task<bool> MediaCoordinator(string typeOfAction, LibraryItem libraryItem, string fromType);
         Task<bool> DeleteLibraryItem(int id);
     }
 }

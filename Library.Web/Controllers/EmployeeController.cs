@@ -17,8 +17,6 @@ namespace Library.Web.Controllers
         private readonly IEmployeeService _employeeService;
         private readonly IMapper _mapper;
 
-        private static Dictionary<string, Func<bool>> _handlers = new Dictionary<string, Func<bool>>();
-
         public EmployeeController(IEmployeeService employeeService, IMapper mapper)
         {
             _employeeService = employeeService;
@@ -58,31 +56,17 @@ namespace Library.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Checks what kind of employee to create
-                if (viewModel.EmployeeType == EmployeeType.Employee)
+                var employee = _mapper.Map<EmployeeModel, EmployeeDto>(viewModel.Employee);
+
+                try
                 {
-                    var employee = _mapper.Map<EmployeeModel, EmployeeDto>(viewModel.Employee);
-                    await _employeeService.CreateEmployee(employee);
+                    await _employeeService.CreateEmployee(employee, viewModel.EmployeeType);
                 }
 
-                else if (viewModel.EmployeeType == EmployeeType.Manager)
+                catch (InvalidOperationException)
                 {
-                    var employee = _mapper.Map<EmployeeModel, EmployeeDto>(viewModel.Employee);
-                    employee.IsManager = true;
-                    await _employeeService.CreateEmployee(employee);
-                }
-
-                else
-                {
-                    if (await _employeeService.IsThereAnyExistingCeo())
-                    {
-                        ModelState.AddModelError("OnlyOneCEOError", "Error! There can only exist one CEO");
-                        return View(viewModel);
-                    }
-
-                    var employee = _mapper.Map<EmployeeModel, EmployeeDto>(viewModel.Employee);
-                    employee.IsCEO = true;
-                    await _employeeService.CreateEmployee(employee);
+                    ModelState.AddModelError("OnlyOneCEOError", "Error! There can only exist one CEO");
+                    return View(viewModel);
                 }
 
                 return RedirectToAction("Index", "Employee");

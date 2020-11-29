@@ -1,4 +1,5 @@
 ﻿using Library.Engine.Dtos;
+using Library.Engine.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace Library.Engine.Interface
     {
         Task<EmployeeDto> GetEmployee(int id);
         Task<List<EmployeeDto>> GetAllEmployees();
-        Task CreateEmployee(EmployeeDto employeeDto);
+        Task CreateEmployee(EmployeeDto employeeDto, EmployeeType employeeType);
         Task EditEmployee(EmployeeDto employee);
         Task<bool> DeleteEmployee(int id);
         Task<int> GetManagersId();

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Library.Engine.Enums;
+using System;
 
 namespace Library.Engine
 {
@@ -69,11 +70,30 @@ namespace Library.Engine
             return nonRegularMapped;
         }
 
-        public async Task CreateEmployee(EmployeeDto employeeDto)
+        public async Task CreateEmployee(EmployeeDto employeeDto, EmployeeType employeeType)
         {
             var employee = _mapper.Map<EmployeeDto, Employee>(employeeDto);
-            employee.Salary = MakeSalaryCalculation(employeeDto);
 
+            if (employeeType == EmployeeType.Employee)
+            {
+                employee.IsManager = false;
+                employee.IsCEO = false;
+            }
+
+            else if (employeeType == EmployeeType.Manager)
+            {
+                employee.IsManager = true;
+            }
+
+            else
+            {
+                if (await IsThereAnyExistingCeo())
+                    throw new InvalidOperationException("OnlyOneCEOError");
+
+                employee.IsCEO = true;
+            }
+
+            employee.Salary = MakeSalaryCalculation(employeeDto);
             await _employeeRepository.CreateEmployee(employee);
         }
 

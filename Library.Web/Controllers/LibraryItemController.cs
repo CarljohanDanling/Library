@@ -12,7 +12,7 @@ using System;
 
 namespace Library.Web.Controllers
 {
-    // The library part was the one I struggled most with. When I started working on it I choose to
+    // The library part was the one I struggled most with. When I started working on it I chose to
     // have a model for each library item. I also had one view for "creating" and one for "editing"
     // each library item. For example "CreateAudioBook.cshtml" and "EditAudioBook.cshtml". This seemed like
     // a good move at first, but, when I started to think about it, I found that having it like that
@@ -117,8 +117,8 @@ namespace Library.Web.Controllers
             return View(viewModel);
         }
 
-        // This method calls MediaCoordinator (service layer). If an invalid operation takes place in the service layer, it bubbles up
-        // to this method and apply model state error.
+        // This method calls MediaCoordinator (service layer). If an invalid operation takes place
+        // in the service layer, it bubbles up to this method and applies model state error.
         [HttpPost]
         public async Task<IActionResult> Edit(EditLibraryItemViewModel viewModel, MediaItemCategory mediaItemCategory,
             string typeOfAction, LibraryItemType type)

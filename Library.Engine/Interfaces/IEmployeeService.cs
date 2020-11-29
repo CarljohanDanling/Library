@@ -9,13 +9,14 @@ namespace Library.Engine.Interface
     {
         Task<EmployeeDto> GetEmployee(int id);
         Task<List<EmployeeDto>> GetAllEmployees();
+        Task EmployeeCoordinator(EmployeeDto employeeDto, EmployeeType currentEmployeeType,
+            EmployeeType newEmployeeType);
         Task CreateEmployee(EmployeeDto employeeDto, EmployeeType employeeType);
         Task EditEmployee(EmployeeDto employee);
         Task<bool> DeleteEmployee(int id);
-        Task<int> GetManagersId();
+        Task<int> GetOneManagerId();
         Task<List<EmployeeDto>> GetNonRegularEmployees();
         Task ClearManagerIdFromEmployees(int id);
-        Task<bool> IsThereAnyExistingCeo();
         Task<bool> IsManagingOther(int id);
     }
 }

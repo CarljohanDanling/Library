@@ -11,7 +11,7 @@ namespace Library.Web.Controllers
 {
     public class CategoryController : Controller
     {
-        // I choose to have duplicate names of the different methods.
+        // I chose to have duplicate names of the different methods.
         // I differentiate between them by adding [HttpGet] and [HttpPost].
 
         private readonly ICategoryService _categoryService;
@@ -36,6 +36,7 @@ namespace Library.Web.Controllers
             return View();
         }
 
+        // Creates an category. Also checks so there wont be any duplicate category name.
         [HttpPost]
         public async Task<IActionResult> Create(CategoryModel category)
         {

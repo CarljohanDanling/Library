@@ -24,6 +24,48 @@ namespace Library.Engine
             _mapper = mapper;
         }
 
+        // Im not very happy with this method. First, its too big and secondly it screams "DRY".
+        // The thing is, I need to take different actions depending on the empoloyee type and user action. 
+        // I found it hard to make a generic version. The "isChangingEmployeeType" is used to check if the employee
+        // wants to make a shift from one employee type to another.
+        public async Task EmployeeCoordinator(EmployeeDto employeeDto, EmployeeType currentEmployeeType,
+            EmployeeType newEmployeeType)
+        {
+            var isChangingEmployeeType = currentEmployeeType != newEmployeeType;
+
+            if (isChangingEmployeeType)
+            {
+                switch (currentEmployeeType)
+                {
+                    case EmployeeType.Employee:
+                        await RegularEmployeeHandler(employeeDto, currentEmployeeType, newEmployeeType);
+                        break;
+                    case EmployeeType.Manager:
+                        await ManagerHandler(employeeDto, currentEmployeeType, newEmployeeType);
+                        break;
+                    case EmployeeType.CEO:
+                        await CEOHandler(employeeDto, currentEmployeeType, newEmployeeType);
+                        break;
+                }
+
+                return;
+            }
+
+            switch (currentEmployeeType)
+            {
+                case EmployeeType.Employee:
+                    await EditEmployee(employeeDto);
+                    break;
+                case EmployeeType.Manager:
+                    employeeDto.IsManager = true;
+                    await EditEmployee(employeeDto);
+                    break;
+                case EmployeeType.CEO:
+                    employeeDto.IsCEO = true;
+                    await EditEmployee(employeeDto);
+                    break;
+            }
+        }
 
         public async Task<EmployeeDto> GetEmployee(int id)
         {
@@ -42,6 +84,8 @@ namespace Library.Engine
             return employeeMapped;
         }
 
+        // Getting all employees together with the name of their manager
+        // and also grouping them by employee type.
         public async Task<List<EmployeeDto>> GetAllEmployees()
         {
             var employees = await _employeeRepository.GetAllEmployees();
@@ -52,9 +96,9 @@ namespace Library.Engine
             return employeesGrouped;
         }
 
-        public async Task<int> GetManagersId()
+        public async Task<int> GetOneManagerId()
         {
-            return await _employeeRepository.GetManagerId();
+            return await _employeeRepository.GetOneManagerId();
         }
 
         public async Task ClearManagerIdFromEmployees(int id)
@@ -78,6 +122,7 @@ namespace Library.Engine
             {
                 employee.IsManager = false;
                 employee.IsCEO = false;
+
             }
 
             else if (employeeType == EmployeeType.Manager)
@@ -93,14 +138,14 @@ namespace Library.Engine
                 employee.IsCEO = true;
             }
 
-            employee.Salary = MakeSalaryCalculation(employeeDto);
+            employee.Salary = MakeSalaryCalculation(employee, employeeDto.Rank);
             await _employeeRepository.CreateEmployee(employee);
         }
 
         public async Task EditEmployee(EmployeeDto employeeDto)
         {
             var employee = _mapper.Map<EmployeeDto, Employee>(employeeDto);
-            employee.Salary = MakeSalaryCalculation(employeeDto);
+            employee.Salary = MakeSalaryCalculation(employee, employeeDto.Rank);
             await _employeeRepository.EditEmployee(employee);
         }
 
@@ -110,25 +155,106 @@ namespace Library.Engine
             return await _employeeRepository.DeleteEmployee(employeeToDelete);
         }
 
-        public async Task<bool> IsThereAnyExistingCeo()
-        {
-            return await _employeeRepository.CheckIfCeoAlreadyExist();
-        }
-
         public async Task<bool> IsManagingOther(int id)
         {
             return await _employeeRepository.CheckIfManagingOther(id);
         }
 
-        private decimal MakeSalaryCalculation(EmployeeDto employeeDto)
+        // This is the handler for the regular employee. I differentiate what the users wants to do by checking
+        // the current employee type with what the user chose. I think the variable name "regularEmployeeToManager" is quite
+        // self explanatory. I chose to make the regular employee able to upgrade to manager or ceo.
+        private async Task RegularEmployeeHandler(EmployeeDto employeeDto, EmployeeType currentEmployeeType, 
+            EmployeeType newEmployeeType)
         {
-            if (employeeDto.IsManager)
-                return _salaryCalculator.CalculateManagerSalary(employeeDto.Rank);
+            var regularEmployeeToManager = 
+                currentEmployeeType == EmployeeType.Employee && newEmployeeType == EmployeeType.Manager;
 
-            else if (employeeDto.IsCEO)
-                return _salaryCalculator.CalculateCEOSalary(employeeDto.Rank);
+            // Regular Employee -> Manager
+            if (regularEmployeeToManager)
+            {
+                employeeDto.IsManager = true;
+                await EditEmployee(employeeDto);
+                return;
+            }
 
-            return _salaryCalculator.CalculateRegularSalary(employeeDto.Rank);
+            // Regular Employee -> CEO
+            // If employee wants to be a CEO, I need to check if there already exist one.
+            if (await IsThereAnyExistingCeo())
+                throw new InvalidOperationException("OnlyOneCEOError");
+
+            // Removes ManagerId because CEO cannot be managed by anyone.
+            employeeDto.ManagerId = null;
+            employeeDto.IsCEO = true;
+            await EditEmployee(employeeDto);
+        }
+
+        // This is the handler for the managers. As in the previous method is differentiate the user's action and
+        // try to catch errors. I took the decision that a Manager cannot downgrade to a regular employee.
+        private async Task ManagerHandler(EmployeeDto employeeDto, EmployeeType currentEmployeeType, 
+            EmployeeType newEmployeeType)
+        {
+            var managerToEmployee = 
+                currentEmployeeType == EmployeeType.Manager && newEmployeeType == EmployeeType.Employee;
+
+            // Manager -> Regular Employee
+            if (managerToEmployee)
+            {
+                throw new InvalidOperationException("ManagerToRegularEmployeeError");
+            }
+
+            // Manager -> CEO, checking if its possible
+            if (await IsThereAnyExistingCeo())
+            {
+                throw new InvalidOperationException("OnlyOneCEOError");
+            }
+
+            // Manager -> CEO success
+            await ClearManagerIdFromEmployees(employeeDto.Id);
+            employeeDto.IsCEO = true;
+            employeeDto.ManagerId = null;
+            await EditEmployee(employeeDto);
+        }
+
+        // This is the handler for the CEO. I added support for the CEO to downgrade
+        // to manager or even regular employee.
+        private async Task CEOHandler(EmployeeDto employee, EmployeeType currentType, EmployeeType newType)
+        {
+            var ceoToManager = 
+                currentType == EmployeeType.CEO && newType == EmployeeType.Manager;
+
+            // CEO -> MAager
+            if (ceoToManager)
+            {
+                employee.IsManager = true;
+                await EditEmployee(employee);
+                return;
+            }
+
+            // CEO -> Regular Employee
+            await ClearManagerIdFromEmployees(employee.Id);
+            
+            // Assigns an manager, because as a regular employee, you need someone to report to.
+            var managerId = await GetOneManagerId();
+            employee.ManagerId = managerId;
+
+            await EditEmployee(employee);
+            return;
+        }
+
+        private async Task<bool> IsThereAnyExistingCeo()
+        {
+            return await _employeeRepository.CheckIfCeoAlreadyExist();
+        }
+
+        private decimal MakeSalaryCalculation(Employee employee, int rank)
+        {
+            if (employee.IsManager)
+                return _salaryCalculator.CalculateManagerSalary(rank);
+
+            else if (employee.IsCEO)
+                return _salaryCalculator.CalculateCEOSalary(rank);
+
+            return _salaryCalculator.CalculateRegularSalary(rank);
         }
 
         // This method connects employees with their manager. I wanted to show "Managed By"

@@ -30,7 +30,7 @@ namespace Library.Data
             return await _libraryContext.Employees.ToListAsync();
         }
 
-        public async Task<int> GetManagerId()
+        public async Task<int> GetOneManagerId()
         {
             return await _libraryContext.Employees
                 .Where(emp => emp.IsManager)

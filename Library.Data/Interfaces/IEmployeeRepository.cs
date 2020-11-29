@@ -9,7 +9,7 @@ namespace Library.Data.Interfaces
         Task<Employee> GetEmployee(int id);
         Task<List<Employee>> GetAllEmployees();
         Task<List<Employee>> GetNonRegularEmployees();
-        Task<int> GetManagerId();
+        Task<int> GetOneManagerId();
         Task RemoveManagerIdFromEmployees(int id);
         Task CreateEmployee(Employee employee);
         Task EditEmployee(Employee employee);

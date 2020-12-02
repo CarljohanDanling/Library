@@ -44,15 +44,15 @@ namespace Library.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(nullable: false),
                     CategoryId = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(nullable: false),
                     Author = table.Column<string>(nullable: true),
                     Pages = table.Column<int>(nullable: true),
                     RunTimeMinutes = table.Column<int>(nullable: true),
                     IsBorrowable = table.Column<bool>(nullable: false),
                     Borrower = table.Column<string>(nullable: true),
                     BorrowDate = table.Column<DateTime>(nullable: true),
-                    Type = table.Column<string>(nullable: true)
+                    Type = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {

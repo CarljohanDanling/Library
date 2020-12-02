@@ -222,7 +222,7 @@ namespace Library.Engine
             var ceoToManager = 
                 currentType == EmployeeType.CEO && newType == EmployeeType.Manager;
 
-            // CEO -> MAager
+            // CEO -> Manager
             if (ceoToManager)
             {
                 employee.IsManager = true;

@@ -60,21 +60,23 @@ namespace Library.Engine
 
             else
             {
-                if (fromType == "Book" && libraryItem.IsBorrowable)
+                if (fromType == "ReferenceBook" && libraryItem.Type == "ReferenceBook" ||
+                    fromType == "ReferenceBook" && libraryItem.Type == "Book")
                 {
-                    libraryItem.IsBorrowable = false;
                     await EditLibraryItem(libraryItem);
                     return true;
                 }
 
-                else if (fromType == "ReferenceBook")
+                else if (fromType == "Book" && libraryItem.IsBorrowable == false)
                 {
-                    libraryItem.IsBorrowable = true;
+                    throw new InvalidOperationException();
+                }
+
+                else
+                {
                     await EditLibraryItem(libraryItem);
                     return true;
                 }
-
-                throw new InvalidOperationException();
             }
         }
 
@@ -83,9 +85,9 @@ namespace Library.Engine
         {
             if (typeOfAction == "Edit")
             {
-                try {await EditHandler(libraryItem, fromType);}
+                try { await EditHandler(libraryItem, fromType); }
 
-                catch (Exception) {throw new InvalidOperationException("NonBorrowableError");}
+                catch (Exception) { throw new InvalidOperationException("NonBorrowableError"); }
 
                 return true;
             }
@@ -127,14 +129,11 @@ namespace Library.Engine
                 libraryItem.IsBorrowable = false;
 
                 await _libraryItemRepository.EditLibraryItem(libraryItem);
+                return;
             }
 
-            else if (libraryItem.IsBorrowable == false)
-                await _libraryItemRepository.EditLibraryItem(libraryItem);
-
-            else
-                libraryItem.IsBorrowable = true;
-                await _libraryItemRepository.EditLibraryItem(libraryItem);
+            libraryItem.IsBorrowable = true;
+            await _libraryItemRepository.EditLibraryItem(libraryItem);
         }
 
         private async Task BorrowLibraryItem(LibraryItem libraryItem)
